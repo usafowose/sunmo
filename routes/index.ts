@@ -1,10 +1,16 @@
-import { RequestHandler } from 'express';
+import { RequestHandler, Router } from 'express';
+import { ProfileRouter, TestUserRouter, } from './profile';
 
-export interface Route {
-  method: string;
-  route: string;
-  handler: RequestHandler;
+export interface RouteConfig {
+  baseRoute: string,
+  entityRouter: Router,
 }
-// all routes should be exported as routes from their respective routers here
-export * from './profile';
-// export * from './invitation';
+
+export const Routes: RouteConfig[] = [{
+  baseRoute: '/profiles',
+  entityRouter: ProfileRouter.router
+}, {
+  baseRoute: '/users',
+  entityRouter: TestUserRouter.router
+},]
+
