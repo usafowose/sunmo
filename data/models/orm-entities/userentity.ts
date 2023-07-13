@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from "typeorm";
+import { Profile } from "./profileentity";
 
 @Entity()
 export class User {
@@ -25,4 +26,8 @@ export class User {
 
     @Column("bool", { default: false })
     is_registered: boolean;
+
+    @OneToOne(() => Profile, profile => profile.user, { onDelete: "CASCADE" })
+    profile: Profile
+
 }
