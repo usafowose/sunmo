@@ -1,4 +1,4 @@
-import { Profile, NewProfile } from "../data/models/profile";
+import { Profile } from "../data/models";
 import { APIError, APIRoute, ErrorService, ProfileHandlerMethod } from "../services/errorservice";
 import {ProfileService} from '../services/profile';
 
@@ -10,22 +10,37 @@ export const getAllProfiles = async (): Promise<Profile[]> => {
 
     return allProfiles;
   } catch (err) {
-    const error = err as APIError;
-    throw(error);
+    if (err.code) {
+      if (err.message) {
+        throw new APIError(err.message, err.code);
+      }
+      throw new APIError(ErrorService.defaultErrorMessage, err.code)
+    } else {
+      if (err.message) {
+        throw new APIError(err.message, 500);
+      }
+      throw ErrorService.defaultError();
+    }
   }
 }
 
-// user clicks a profile in tree to view more info.. this profile is already mapped to id so we can grab profile directly from id
 export const getProfileById = async (profileId: string): Promise<Profile> => {
   try {
-    const profile: Profile | null = await profileService.getProfileById(profileId);
-    if (!profile) {
-      throw ErrorService.getError(APIRoute.PROFILES, ProfileHandlerMethod.GETPROFILE, 404);
-    }
+    const profile: Profile = await profileService.getProfileById(profileId);
+    return profile ?? null;
 
-    return profile;
   } catch(err) {
-      throw(err);
+    if (err.code) {
+      if (err.message) {
+        throw new APIError(err.message, err.code);
+      }
+      throw new APIError(ErrorService.defaultErrorMessage, err.code)
+    } else {
+      if (err.message) {
+        throw new APIError(err.message, 500);
+      }
+      throw ErrorService.defaultError();
+    }
   }
 }
 
