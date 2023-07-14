@@ -3,7 +3,6 @@ import { Profile } from '../../data/models';
 import  { APIError, APIRoute, ErrorService, ProfileHandlerMethod, } from '../../services/errorservice';
 import {/* updateProfile createProfile, */ getProfileById, getAllProfiles } from '../../controllers/profileController';
 
-//Id should be passed in via request parameters
 export const getProfileByIdHandler: RequestHandler<{ id: string }> = async (
   req: Request<{ id: string }>,
   res: Response<Profile>,
