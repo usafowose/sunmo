@@ -1,4 +1,4 @@
-import { FilterMap, operatorSymbolMap, Operator } from "../access/models";
+import { FilterMap, operatorSymbolMap, Operator } from "./operatorsymbolmap";
 
 export enum Method {
   Get = 'GET',
@@ -20,19 +20,19 @@ export class StandardQueryBuilder {
     tableName: string,
     filters?: FilterMap,
     columnNames?: undefined,
-  ): string;
+  ): string | null;
   public getQuery(
     method: Method.Put | Method.Patch,
     tableName: string,
     filters?: FilterMap,
     columnNames?: string[],
-  ): string;
+  ): string | null;
   public getQuery(
     method: Method.Post,
     tableName: string,
     filters?: undefined,
     columnNames?: string[],
-  ): string;
+  ): string | null;
   public getQuery(
     method: Method.Delete,
     tableName: string,
