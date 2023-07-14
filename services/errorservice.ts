@@ -27,18 +27,20 @@ export class APIError extends Error {
   }
 }
 
-export class ErrorService{
-  static defaultError: APIError = new APIError('Internal Server Error', 500);
+export class ErrorService {
+  static defaultError = (message?: string): APIError => new APIError(this.defaultErrorMessage + (message ? `: ${message}` : ''), 500);
+  static defaultErrorMessage =  'Internal Server Error'
 
-  static getError(route: APIRoute, method: HandlerMethod, errorCode: number): APIError {
-    if (errorCode === 500) {
-      return this.defaultError;
+  static getError(): APIError
+  static getError(route?: APIRoute, method?: HandlerMethod, errorCode?: number): APIError {
+    if (!errorCode || errorCode === 500) {
+      return this.defaultError();
     }
 
     switch (route) {
       case APIRoute.PROFILES:
         return this._setProfilesRouteError(method as ProfileHandlerMethod, errorCode);
-      default:return this.defaultError;
+      default:return this.defaultError();
     }
   }
 
@@ -49,17 +51,17 @@ export class ErrorService{
           case 400: return new APIError('Bad Request', errorCode);
           case 404: return new APIError('Not Found', errorCode);
           case 409: return new APIError('Resource Already Exists', errorCode);
-          default: return this.defaultError;
+          default: return this.defaultError();
         }
 
       case ProfileHandlerMethod.GETPROFILE:
         switch (errorCode) {
           case 400: return new APIError('Bad Request', errorCode);
           case 404: return new APIError('Not Found', errorCode);
-          default: return this.defaultError;
+          default: return this.defaultError();
         }
 
-      default: return this.defaultError;
+      default: return this.defaultError();
     }
   }
 

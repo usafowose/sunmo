@@ -14,7 +14,7 @@ export class UserService {
       const user: User = await this._userAccessLayer.getUserById(id);
       return user || null;
     } catch (err) {
-      console.error(String(err));
+      throw err;
     }
   }
 
@@ -23,7 +23,6 @@ export class UserService {
       const allUsers: User[] = await this._userAccessLayer.getAllActiveUsers();
       return allUsers;
     } catch(err){
-      console.error(String(err));
       throw err;
     }
   }
