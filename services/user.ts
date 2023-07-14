@@ -28,12 +28,25 @@ export class UserService {
     }
   }
 
-  async createUnregisteredUser(user: CreateUserInput): Promise<User> {
-    const unregisteredUserObj: CreateUserInput & Pick<User, 'is_registered'> = { ...user, is_registered: false }
+  async createPendingUser(user: CreateUserInput): Promise<User> {
+    const unregisteredUserObj: CreateUserInput & Pick<User, 'is_registered'> = {
+      ...user,
+      is_registered: false 
+    };
+
     try {
       const createdUser = await this._userAccessLayer.createUnregisteredUser(unregisteredUserObj);
       return createdUser;
     } catch (err) {
+      throw err;
+    }
+  }
+
+  async getAllPendingAndActiveUsers(): Promise<User[]> {
+    try {
+      const allUsers: User[] = await this._userAccessLayer.getAllUsers();
+      return allUsers
+    } catch(err) {
       throw err;
     }
   }

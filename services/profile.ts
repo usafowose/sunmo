@@ -38,12 +38,12 @@ export class ProfileService {
     this._profileAccessLayer = new ProfileAccessLayer();
   }
   
-  async getProfileById(id: string): Promise<Profile | string> {
+  async getProfileById(id: string): Promise<Profile> {
     try {
       //TODO (afowose): remove this from any type and return raw type straight from DAL to be transformed into Profile type
       const rawProfile: Profile = await this._profileAccessLayer.getProfileById(id);
       if (!rawProfile) {
-        return '';
+        return null;
       }
       console.log(rawProfile);
       // const cleanedData: Profile = this._cleanRawProfileData(rawProfile);
