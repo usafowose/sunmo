@@ -31,7 +31,8 @@ export class ErrorService {
   static defaultError = (message?: string): APIError => new APIError(this.defaultErrorMessage + (message ? `: ${message}` : ''), 500);
   static defaultErrorMessage =  'Internal Server Error'
 
-  static getError(): APIError
+
+
   static getError(route?: APIRoute, method?: HandlerMethod, errorCode?: number): APIError {
     if (!errorCode || errorCode === 500) {
       return this.defaultError();
@@ -43,7 +44,9 @@ export class ErrorService {
       default:return this.defaultError();
     }
   }
-
+  static getMissingReqParamsError<T>(reqParams: T, paramName: keyof T): APIError {
+    return new APIError('Missing Request Parameter: ' + String(reqParams[paramName]), 400);
+  }
   private static _setProfilesRouteError(method: ProfileHandlerMethod, errorCode: number): APIError {
     switch (method) {
       case ProfileHandlerMethod.CREATEPROFILE:

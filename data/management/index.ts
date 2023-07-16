@@ -1,1 +1,1 @@
-export {sqlDB, ConnectionManager} from './connectionmanager';
+export {sqlDB, connectionManager1} from './connectionmanager';

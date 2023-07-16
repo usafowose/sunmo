@@ -62,7 +62,7 @@ export const getPendingUsers = async (): Promise<User[]> => {
   }
 }
 
-export const getUserByLastName = async (lastName: string): Promise<User[]> => {
+export const getUsersByLastName = async (lastName: string): Promise<User[]> => {
   try {
     const users: User[] = await userService.getUserByAttribute('last_name', lastName);
     return users;

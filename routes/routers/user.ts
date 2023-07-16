@@ -2,7 +2,7 @@ import { Router } from "express";
 import * as express from 'express';
 import { getAllUsersHandler, getUnregisteredUsersHandler } from "../handlers";
 
-export class TestUserRouter {
+export class UserRouter {
   private static _router: Router = express.Router();
 
   static get router(): Router {
