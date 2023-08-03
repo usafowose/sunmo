@@ -48,7 +48,7 @@ export const getUserById = async (userId: string): Promise<User> => {
 
 export const getPendingUsers = async (): Promise<User[]> => {
   try {
-    const unregisteredUsers: User[] = await userService.getPendingUsers();
+    const unregisteredUsers: User[] = await userService.getAllPendingUsers();
     return unregisteredUsers.length ? unregisteredUsers : null;
   } catch(err) {
     if (err.code) {
@@ -87,71 +87,52 @@ export const getUsersByLastName = async (lastName: string): Promise<User[]> => {
   }
 }
 
-export const resetUserPassword = (userId: string, newPassword): Promise<void> => {
-    return Promise.resolve();
-}
+// export const resetUserPassword = (userId: string, newPassword): Promise<void> => {
+//     return Promise.resolve();
+// }
 
-export const changeUserName = async (newUserName: string): Promise<void> => {
-  try {
-    await userService.changeUserName(newUserName);
-  } catch(err) {
-    if (err.code) {
-      if (err.message) {
-        throw new APIError(err.code, err.message);
-      }
-      throw new APIError(err.code, ErrorService.defaultErrorMessage)
-    } else {
-      if (err.message) {
-        throw new APIError(500, err.message);
-      }
+// export const changeUserName = async (newUserName: string): Promise<void> => {
+//   try {
+//     await userService.changeUserName(newUserName);
+//   } catch(err) {
+//     if (err.code) {
+//       if (err.message) {
+//         throw new APIError(err.code, err.message);
+//       }
+//       throw new APIError(err.code, ErrorService.defaultErrorMessage)
+//     } else {
+//       if (err.message) {
+//         throw new APIError(500, err.message);
+//       }
 
-      throw ErrorService.defaultError();
-    }
-  }
-}
+//       throw ErrorService.defaultError();
+//     }
+//   }
+// }
 
-export const changeUserEmail = async (userId: string, newEmail: string): Promise<void> => {
-  try {
-    await userService.changeUserEmail(userId, newEmail);
-  } catch(err) {
-    if (err.code) {
-      if (err.message) {
-        throw new APIError(err.code, err.message);
-      }
-      throw new APIError(err.code, ErrorService.defaultErrorMessage)
-    } else {
-      if (err.message) {
-        throw new APIError(500, err.message);
-      }
+// export const changeUserEmail = async (userId: string, newEmail: string): Promise<void> => {
+//   try {
+//     await userService.changeUserEmail(userId, newEmail);
+//   } catch(err) {
+//     if (err.code) {
+//       if (err.message) {
+//         throw new APIError(err.code, err.message);
+//       }
+//       throw new APIError(err.code, ErrorService.defaultErrorMessage)
+//     } else {
+//       if (err.message) {
+//         throw new APIError(500, err.message);
+//       }
 
-      throw ErrorService.defaultError();
-    }
-  }
-}
+//       throw ErrorService.defaultError();
+//     }
+//   }
+// }
 
 export const getUsersWithFilters = async (filters: Map<UserKey, any>): Promise<User[]> => {
   try {
     const filteredUsers: User[] = await userService.getUsersWhere(filters);
     return filteredUsers;
-  } catch(err) {
-    if (err.code) {
-      if (err.message) {
-        throw new APIError(err.code, err.message);
-      }
-      throw new APIError(err.code, ErrorService.defaultErrorMessage)
-    } else {
-      if (err.message) {
-        throw new APIError(500, err.message);
-      }
-
-      throw ErrorService.defaultError();
-    }
-  }
-}
-
-export const updateEmail = async (userId: string, email: string): Promise<void> => {
-  try {
-    return await userService.updateEmail(userId, email);
   } catch(err) {
     if (err.code) {
       if (err.message) {
