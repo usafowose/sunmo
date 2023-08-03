@@ -59,6 +59,9 @@ sqlDB.initialize().then(async () => {
 
 const errorMW = (err: APIError, req: Request, res: Response, next: NextFunction): Response<any> => {
   const { message, code } = err;
-  console.error(message); //TODO(afowose) Log the error for debugging purposes via middleware or Logger class
+  if (message) {
+    console.error(message); //TODO(afowose) Log the error for debugging purposes via middleware or Logger class
+  }
+
   return res.status(code).json(err);
 };
