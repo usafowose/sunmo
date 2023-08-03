@@ -14,10 +14,10 @@ export const getAllProfiles = async (): Promise<Profile[]> => {
       if (err.message) {
         throw new APIError(err.message, err.code);
       }
-      throw new APIError(ErrorService.defaultErrorMessage, err.code)
+      throw new APIError(err.code, ErrorService.defaultErrorMessage)
     } else {
       if (err.message) {
-        throw new APIError(err.message, 500);
+        throw new APIError(500, err.message);
       }
       throw ErrorService.defaultError();
     }
@@ -34,10 +34,10 @@ export const getProfileById = async (profileId: string): Promise<Profile> => {
       if (err.message) {
         throw new APIError(err.message, err.code);
       }
-      throw new APIError(ErrorService.defaultErrorMessage, err.code)
+      throw new APIError(err.code, ErrorService.defaultErrorMessage);
     } else {
       if (err.message) {
-        throw new APIError(err.message, 500);
+        throw new APIError(500, err.message);
       }
       throw ErrorService.defaultError();
     }

@@ -1,10 +1,12 @@
 import { Pool } from 'mysql2/promise';
 import { Repository } from "typeorm";
+import { UserKey } from '../../routes/handlers';
 
 import { connectionManager1, sqlDB } from "../management";
 import { User } from "../models";
 import { CreateUserInput } from '../models/profile';
-import { StandardQueryBuilder } from "../utils/querybuilder";
+import { UserFilterInput } from '../models/user';
+import { StandardQueryBuilder } from "../../utils/querybuilder";
 
 export class UserAccessLayer {
   private _inbuiltConnection: Pool = connectionManager1.connectionPool;
@@ -22,10 +24,10 @@ export class UserAccessLayer {
     }
   }
 
-  async getUserById(id: string): Promise<User | null> {
+  async getUserById(id: string): Promise<User[]> {
     try {
-      const user = this._userRepo.findOneBy({ user_id: Number(id)} );
-      return user || null;
+      const user = this._userRepo.findBy({ user_id: Number(id)} );
+      return user;
     } catch(err) {
       throw err;
     }
@@ -48,4 +50,20 @@ export class UserAccessLayer {
     }
   }
 
+  async getUsersWhere(filters: UserFilterInput): Promise<User[]> {
+    try {
+      const results = await this._userRepo.findBy(filters)
+      return results;
+    } catch(err) {
+      throw err;
+    }
+  }
+
+  async getUnregisteredUsers(): Promise<User[]> {
+    try {
+      return await this._userRepo.findBy({'is_registered': false});
+    } catch (err) {
+      throw err;
+    }
+  }
 }

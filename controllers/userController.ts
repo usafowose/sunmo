@@ -26,9 +26,9 @@ export const getAllUsers = async (): Promise<User[]> => {
 }
 
 // user clicks a profile in tree to view more info.. this profile is already mapped to id so we can grab profile directly from id
-export const getUserById = async (userId: string): Promise<User> => {
+export const getUserById = async (userId: string): Promise<User[]> => {
   try {
-    const user: User = await userService.getUserById(userId);
+    const user: User[] = await userService.getUserById(userId);
     return user;
   } catch(err) {
     if (err.code) {

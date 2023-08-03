@@ -1,8 +1,8 @@
 import { Pool } from 'mysql2/promise';
 //import { ProfileResult } from '../models/profile';
 import { sqlDB, connectionManager1 } from '../management';
-import { FilterMap, operatorSymbolMap, Operator } from '../utils/operatorsymbolmap';
-import { Method, StandardQueryBuilder } from '../utils/querybuilder';
+import { FilterMap, operatorSymbolMap, Operator } from '../../utils/operatorsymbolmap';
+import { Method, StandardQueryBuilder } from '../../utils/querybuilder';
 import { In, Repository } from 'typeorm';
 import { Profile } from '../models/orm-entities/profileentity';
 
