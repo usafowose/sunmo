@@ -15,14 +15,14 @@ class InbuiltConnectionManager {
 
   private _getConnectionPoolConfig(): PoolOptions {
     const config: PoolOptions = {
-      host: 'localhost',
-      user: 'root',
+      host: process.env.DB_HOSTNAME,
+      user: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
-      database: 'sunmodb',
+      database: process.env.DB_NAME,
       connectionLimit: 10,
       waitForConnections: true,
-      port: 3306,
-      connectTimeout: 60000,
+      port: +process.env.DB_PORT,
+      connectTimeout: 10000,
     };
 
     return config;
