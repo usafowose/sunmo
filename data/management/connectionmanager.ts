@@ -3,6 +3,8 @@ import { DataSource, DataSourceOptions, FileLogger } from "typeorm";
 import "reflect-metadata"
 import { User } from "../models";
 import { Profile } from "../models/orm-entities/profileentity";
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 class InbuiltConnectionManager {
   private _connectionPool: Pool;
@@ -38,7 +40,7 @@ const ormDataSourceConfigOptions: DataSourceOptions = {
   connectorPackage: 'mysql2',
   host: 'localhost',
   username: 'root',
-  password: 'Oluwafikayo1!',
+  password: process.env.SQLConnectionPW,
   database: 'sunmodb',
   port: 3306,
   synchronize: true,

@@ -1112,3 +1112,55 @@
 [2023-08-03T21:58:10.121Z][QUERY]: SELECT `User`.`user_id` AS `User_user_id`, `User`.`first_name` AS `User_first_name`, `User`.`last_name` AS `User_last_name`, `User`.`email` AS `User_email`, `User`.`user_name` AS `User_user_name`, `User`.`password` AS `User_password`, `User`.`dob` AS `User_dob`, `User`.`is_registered` AS `User_is_registered` FROM `user` `User` WHERE (`User`.`user_id` = ?) -- PARAMETERS: [2]
 [2023-08-03T21:58:32.888Z][QUERY]: SELECT `User`.`user_id` AS `User_user_id`, `User`.`first_name` AS `User_first_name`, `User`.`last_name` AS `User_last_name`, `User`.`email` AS `User_email`, `User`.`user_name` AS `User_user_name`, `User`.`password` AS `User_password`, `User`.`dob` AS `User_dob`, `User`.`is_registered` AS `User_is_registered` FROM `user` `User`
 [2023-08-03T21:59:07.593Z][QUERY]: SELECT `User`.`user_id` AS `User_user_id`, `User`.`first_name` AS `User_first_name`, `User`.`last_name` AS `User_last_name`, `User`.`email` AS `User_email`, `User`.`user_name` AS `User_user_name`, `User`.`password` AS `User_password`, `User`.`dob` AS `User_dob`, `User`.`is_registered` AS `User_is_registered` FROM `user` `User` WHERE (`User`.`is_registered` = ?) -- PARAMETERS: [false]
+[2023-08-04T16:19:06.675Z][QUERY]: SELECT VERSION() AS `version`
+[2023-08-04T16:19:06.694Z][QUERY]: SELECT * FROM `INFORMATION_SCHEMA`.`SCHEMATA` WHERE `SCHEMA_NAME` = 'sunmodb'
+[2023-08-04T16:19:06.715Z][QUERY]: START TRANSACTION
+[2023-08-04T16:19:06.715Z][QUERY]: SELECT concat('DROP VIEW IF EXISTS `', table_schema, '`.`', table_name, '`') AS `query` FROM `INFORMATION_SCHEMA`.`VIEWS` WHERE `TABLE_SCHEMA` = 'sunmodb'
+[2023-08-04T16:19:06.720Z][QUERY]: SET FOREIGN_KEY_CHECKS = 0;
+[2023-08-04T16:19:06.721Z][QUERY]: SELECT concat('DROP TABLE IF EXISTS `', table_schema, '`.`', table_name, '`') AS `query` FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_SCHEMA` = 'sunmodb'
+[2023-08-04T16:19:06.725Z][QUERY]: DROP TABLE IF EXISTS `sunmodb`.`profile`
+[2023-08-04T16:19:06.725Z][QUERY]: DROP TABLE IF EXISTS `sunmodb`.`user`
+[2023-08-04T16:19:06.753Z][QUERY]: SET FOREIGN_KEY_CHECKS = 1;
+[2023-08-04T16:19:06.754Z][QUERY]: COMMIT
+[2023-08-04T16:19:06.754Z][QUERY]: START TRANSACTION
+[2023-08-04T16:19:06.755Z][QUERY]: SELECT DATABASE() AS `db_name`
+[2023-08-04T16:19:06.756Z][QUERY]: SELECT `TABLE_SCHEMA`, `TABLE_NAME` FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_SCHEMA` = 'sunmodb' AND `TABLE_NAME` = 'user' UNION SELECT `TABLE_SCHEMA`, `TABLE_NAME` FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_SCHEMA` = 'sunmodb' AND `TABLE_NAME` = 'profile'
+[2023-08-04T16:19:06.759Z][QUERY]: SELECT * FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA` = 'sunmodb' AND `TABLE_NAME` = 'typeorm_metadata'
+[2023-08-04T16:19:06.761Z][QUERY]: CREATE TABLE `user` (`user_id` int NOT NULL AUTO_INCREMENT, `first_name` varchar(255) NOT NULL, `last_name` varchar(255) NOT NULL, `email` varchar(255) NOT NULL, `user_name` varchar(255) NULL, `password` varchar(255) NULL, `dob` date NULL, `is_registered` tinyint NOT NULL DEFAULT 0, PRIMARY KEY (`user_id`)) ENGINE=InnoDB
+[2023-08-04T16:19:06.771Z][QUERY]: CREATE TABLE `profile` (`profile_id` int NOT NULL AUTO_INCREMENT, `user_id` int NOT NULL, `display_name` varchar(255) NOT NULL, `profile_icon` varchar(255) NULL, `dob` date NOT NULL, UNIQUE INDEX `REL_d752442f45f258a8bdefeebb2f` (`user_id`), PRIMARY KEY (`profile_id`)) ENGINE=InnoDB
+[2023-08-04T16:19:06.775Z][QUERY]: ALTER TABLE `profile` ADD CONSTRAINT `FK_d752442f45f258a8bdefeebb2f2` FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`) ON DELETE CASCADE ON UPDATE NO ACTION
+[2023-08-04T16:19:06.792Z][QUERY]: COMMIT
+[2023-08-04T16:19:06.795Z][QUERY]: START TRANSACTION
+[2023-08-04T16:19:06.799Z][QUERY]: INSERT INTO `user`(`user_id`, `first_name`, `last_name`, `email`, `user_name`, `password`, `dob`, `is_registered`) VALUES (DEFAULT, ?, ?, ?, DEFAULT, DEFAULT, ?, DEFAULT) -- PARAMETERS: ["Andrew","Fowose","usafowose@gmail.com","2023-08-04"]
+[2023-08-04T16:19:06.803Z][QUERY]: SELECT `User`.`user_id` AS `User_user_id`, `User`.`is_registered` AS `User_is_registered` FROM `user` `User` WHERE `User`.`user_id` = ? -- PARAMETERS: [1]
+[2023-08-04T16:19:06.805Z][QUERY]: INSERT INTO `user`(`user_id`, `first_name`, `last_name`, `email`, `user_name`, `password`, `dob`, `is_registered`) VALUES (DEFAULT, ?, ?, ?, DEFAULT, DEFAULT, ?, DEFAULT) -- PARAMETERS: ["Andrew","Fowose","usafowose@hotmail.com","2023-08-04"]
+[2023-08-04T16:19:06.806Z][QUERY]: SELECT `User`.`user_id` AS `User_user_id`, `User`.`is_registered` AS `User_is_registered` FROM `user` `User` WHERE `User`.`user_id` = ? -- PARAMETERS: [2]
+[2023-08-04T16:19:06.806Z][QUERY]: INSERT INTO `user`(`user_id`, `first_name`, `last_name`, `email`, `user_name`, `password`, `dob`, `is_registered`) VALUES (DEFAULT, ?, ?, ?, DEFAULT, DEFAULT, ?, ?) -- PARAMETERS: ["Andrew","F","usafowose@yahoo.com","2023-08-04",true]
+[2023-08-04T16:19:06.807Z][QUERY]: SELECT `User`.`user_id` AS `User_user_id`, `User`.`is_registered` AS `User_is_registered` FROM `user` `User` WHERE `User`.`user_id` = ? -- PARAMETERS: [3]
+[2023-08-04T16:19:06.808Z][QUERY]: COMMIT
+[2023-08-04T16:25:02.896Z][QUERY]: SELECT VERSION() AS `version`
+[2023-08-04T16:25:02.903Z][QUERY]: SELECT * FROM `INFORMATION_SCHEMA`.`SCHEMATA` WHERE `SCHEMA_NAME` = 'sunmodb'
+[2023-08-04T16:25:02.908Z][QUERY]: START TRANSACTION
+[2023-08-04T16:25:02.908Z][QUERY]: SELECT concat('DROP VIEW IF EXISTS `', table_schema, '`.`', table_name, '`') AS `query` FROM `INFORMATION_SCHEMA`.`VIEWS` WHERE `TABLE_SCHEMA` = 'sunmodb'
+[2023-08-04T16:25:02.912Z][QUERY]: SET FOREIGN_KEY_CHECKS = 0;
+[2023-08-04T16:25:02.913Z][QUERY]: SELECT concat('DROP TABLE IF EXISTS `', table_schema, '`.`', table_name, '`') AS `query` FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_SCHEMA` = 'sunmodb'
+[2023-08-04T16:25:02.917Z][QUERY]: DROP TABLE IF EXISTS `sunmodb`.`profile`
+[2023-08-04T16:25:02.917Z][QUERY]: DROP TABLE IF EXISTS `sunmodb`.`user`
+[2023-08-04T16:25:02.927Z][QUERY]: SET FOREIGN_KEY_CHECKS = 1;
+[2023-08-04T16:25:02.927Z][QUERY]: COMMIT
+[2023-08-04T16:25:02.927Z][QUERY]: START TRANSACTION
+[2023-08-04T16:25:02.928Z][QUERY]: SELECT DATABASE() AS `db_name`
+[2023-08-04T16:25:02.928Z][QUERY]: SELECT `TABLE_SCHEMA`, `TABLE_NAME` FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_SCHEMA` = 'sunmodb' AND `TABLE_NAME` = 'user' UNION SELECT `TABLE_SCHEMA`, `TABLE_NAME` FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_SCHEMA` = 'sunmodb' AND `TABLE_NAME` = 'profile'
+[2023-08-04T16:25:02.930Z][QUERY]: SELECT * FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA` = 'sunmodb' AND `TABLE_NAME` = 'typeorm_metadata'
+[2023-08-04T16:25:02.933Z][QUERY]: CREATE TABLE `user` (`user_id` int NOT NULL AUTO_INCREMENT, `first_name` varchar(255) NOT NULL, `last_name` varchar(255) NOT NULL, `email` varchar(255) NOT NULL, `user_name` varchar(255) NULL, `password` varchar(255) NULL, `dob` date NULL, `is_registered` tinyint NOT NULL DEFAULT 0, PRIMARY KEY (`user_id`)) ENGINE=InnoDB
+[2023-08-04T16:25:02.938Z][QUERY]: CREATE TABLE `profile` (`profile_id` int NOT NULL AUTO_INCREMENT, `user_id` int NOT NULL, `display_name` varchar(255) NOT NULL, `profile_icon` varchar(255) NULL, `dob` date NOT NULL, UNIQUE INDEX `REL_d752442f45f258a8bdefeebb2f` (`user_id`), PRIMARY KEY (`profile_id`)) ENGINE=InnoDB
+[2023-08-04T16:25:02.944Z][QUERY]: ALTER TABLE `profile` ADD CONSTRAINT `FK_d752442f45f258a8bdefeebb2f2` FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`) ON DELETE CASCADE ON UPDATE NO ACTION
+[2023-08-04T16:25:02.955Z][QUERY]: COMMIT
+[2023-08-04T16:25:02.958Z][QUERY]: START TRANSACTION
+[2023-08-04T16:25:02.961Z][QUERY]: INSERT INTO `user`(`user_id`, `first_name`, `last_name`, `email`, `user_name`, `password`, `dob`, `is_registered`) VALUES (DEFAULT, ?, ?, ?, DEFAULT, DEFAULT, ?, DEFAULT) -- PARAMETERS: ["Andrew","Fowose","usafowose@gmail.com","2023-08-04"]
+[2023-08-04T16:25:02.964Z][QUERY]: SELECT `User`.`user_id` AS `User_user_id`, `User`.`is_registered` AS `User_is_registered` FROM `user` `User` WHERE `User`.`user_id` = ? -- PARAMETERS: [1]
+[2023-08-04T16:25:02.966Z][QUERY]: INSERT INTO `user`(`user_id`, `first_name`, `last_name`, `email`, `user_name`, `password`, `dob`, `is_registered`) VALUES (DEFAULT, ?, ?, ?, DEFAULT, DEFAULT, ?, DEFAULT) -- PARAMETERS: ["Andrew","Fowose","usafowose@hotmail.com","2023-08-04"]
+[2023-08-04T16:25:02.966Z][QUERY]: SELECT `User`.`user_id` AS `User_user_id`, `User`.`is_registered` AS `User_is_registered` FROM `user` `User` WHERE `User`.`user_id` = ? -- PARAMETERS: [2]
+[2023-08-04T16:25:02.968Z][QUERY]: INSERT INTO `user`(`user_id`, `first_name`, `last_name`, `email`, `user_name`, `password`, `dob`, `is_registered`) VALUES (DEFAULT, ?, ?, ?, DEFAULT, DEFAULT, ?, ?) -- PARAMETERS: ["Andrew","F","usafowose@yahoo.com","2023-08-04",true]
+[2023-08-04T16:25:02.968Z][QUERY]: SELECT `User`.`user_id` AS `User_user_id`, `User`.`is_registered` AS `User_is_registered` FROM `user` `User` WHERE `User`.`user_id` = ? -- PARAMETERS: [3]
+[2023-08-04T16:25:02.969Z][QUERY]: COMMIT
