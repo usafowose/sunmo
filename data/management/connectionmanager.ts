@@ -17,7 +17,7 @@ class InbuiltConnectionManager {
     const config: PoolOptions = {
       host: 'localhost',
       user: 'root',
-      password: 'Oluwafikayo1!', //TODO (afowose) move to config file or env var
+      password: process.env.DB_PASSWORD,
       database: 'sunmodb',
       connectionLimit: 10,
       waitForConnections: true,
@@ -38,17 +38,13 @@ export const connectionManager1: InbuiltConnectionManager = new InbuiltConnectio
 const ormDataSourceConfigOptions: DataSourceOptions = {
   type: 'mysql',
   connectorPackage: 'mysql2',
-  host: 'localhost',
-  username: 'root',
-  password: process.env.SQLConnectionPW,
-  database: 'sunmodb',
-  port: 3306,
+  host: process.env.DB_HOSTNAME,
+  username: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: +process.env.DB_PORT,
   synchronize: true,
   dropSchema: true,
-  logging: true,
-  logger: new FileLogger(true, {
-    logPath: './data/log.txt'
-  }),
   entities: [User, Profile],
   migrations: [],
   subscribers: [],
