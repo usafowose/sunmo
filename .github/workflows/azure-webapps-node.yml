@@ -41,6 +41,9 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
+          
+      - name: install TS
+        run: npm install typescript@4.5.2
 
       - name: Print TypeScript version
         run: npx tsc --version
