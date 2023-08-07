@@ -4,14 +4,10 @@ import { Express, NextFunction, Request, Response } from "express";
 import { APIError } from "./services/errorservice";
 import "reflect-metadata";
 // TODO(andrewfowose): implement internationalization for fallback page
-import { I18n } from 'i18n';
-import * as dotenv from 'dotenv'
 import { sqlDB } from './data/management';
 import { Routes } from './routes';
 import { User } from './data/models';
-import * as https from 'https'
 
-dotenv.config();
 
 sqlDB.initialize().then(async () => {
 
@@ -52,8 +48,9 @@ sqlDB.initialize().then(async () => {
     })
   ]);
 
-  app.listen(process.env.PORT || 3000, () => {
-    console.log('Server started on port 3000. Open http://localhost:3000 to see results');
+const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server started on port ${PORT}. Open http://localhost:${PORT} to see results`);
   });
 });
 

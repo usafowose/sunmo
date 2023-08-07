@@ -3,6 +3,8 @@ import { DataSource, DataSourceOptions, FileLogger } from "typeorm";
 import "reflect-metadata"
 import { User } from "../models";
 import { Profile } from "../models/orm-entities/profileentity";
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 class InbuiltConnectionManager {
   private _connectionPool: Pool;
@@ -13,14 +15,14 @@ class InbuiltConnectionManager {
 
   private _getConnectionPoolConfig(): PoolOptions {
     const config: PoolOptions = {
-      host: 'localhost',
-      user: 'root',
-      password: 'Oluwafikayo1!', //TODO (afowose) move to config file or env var
-      database: 'sunmodb',
+      host: process.env.DB_HOSTNAME,
+      user: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
       connectionLimit: 10,
       waitForConnections: true,
-      port: 3306,
-      connectTimeout: 60000,
+      port: +process.env.DB_PORT,
+      connectTimeout: 10000,
     };
 
     return config;
@@ -36,20 +38,28 @@ export const connectionManager1: InbuiltConnectionManager = new InbuiltConnectio
 const ormDataSourceConfigOptions: DataSourceOptions = {
   type: 'mysql',
   connectorPackage: 'mysql2',
-  host: 'localhost',
-  username: 'root',
-  password: 'Oluwafikayo1!',
-  database: 'sunmodb',
-  port: 3306,
+  host: process.env.DB_HOSTNAME,
+  username: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: +process.env.DB_PORT,
   synchronize: true,
   dropSchema: true,
-  logging: true,
-  logger: new FileLogger(true, {
-    logPath: './data/log.txt'
-  }),
   entities: [User, Profile],
   migrations: [],
   subscribers: [],
+  ssl: true,
 };
 
-export const sqlDB = new DataSource(ormDataSourceConfigOptions);
+export const sqlDB = new DataSource(
+  process.env.DB_SSLCERT_PATH
+    ? {
+      ...ormDataSourceConfigOptions,
+      ssl: {
+        rejectUnauthorized: true,
+        requestCert: true,
+        ca: process.env.DB_SSLCERT_PATH
+      }
+    }
+    : ormDataSourceConfigOptions
+);
