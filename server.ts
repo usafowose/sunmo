@@ -4,12 +4,10 @@ import { Express, NextFunction, Request, Response } from "express";
 import { APIError } from "./services/errorservice";
 import "reflect-metadata";
 // TODO(andrewfowose): implement internationalization for fallback page
-import { I18n } from 'i18n';
-
 import { sqlDB } from './data/management';
 import { Routes } from './routes';
 import { User } from './data/models';
-import * as https from 'https';
+
 
 sqlDB.initialize().then(async () => {
 
