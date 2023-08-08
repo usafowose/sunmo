@@ -50,7 +50,7 @@ const ormDataSourceConfigOptions: DataSourceOptions = {
   subscribers: [],
   ssl: {
     ca: process.env.DB_SSLCERT_PEM,
-    rejectUnauthorized: true,
+    rejectUnauthorized: false,
   }
 };
 
