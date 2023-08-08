@@ -50,11 +50,4 @@ const ormDataSourceConfigOptions: DataSourceOptions = {
   subscribers: [],
 };
 
-export const sqlDB = new DataSource(
-  process.env.ENVIRONMENT === 'PROD'
-    ? {
-      ...ormDataSourceConfigOptions,
-      ssl: true
-    }
-    : ormDataSourceConfigOptions
-);
+export const sqlDB = new DataSource(ormDataSourceConfigOptions);
