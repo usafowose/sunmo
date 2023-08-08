@@ -18,7 +18,7 @@
    },
    "scripts": {
       "build": "tsc -p tsconfig.json",
-      "start": "ts-node server.ts",
+      "start": "npm run build && node build/server.js",
       "dev": "ts-node server.ts",
       "typeorm": "typeorm-ts-node-commonjs"
    },
