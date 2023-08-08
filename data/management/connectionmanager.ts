@@ -48,6 +48,10 @@ const ormDataSourceConfigOptions: DataSourceOptions = {
   entities: [User, Profile],
   migrations: [],
   subscribers: [],
+  ssl: {
+    ca: process.env.DB_SSLCERT_PEM,
+    rejectUnauthorized: true,
+  }
 };
 
 export const sqlDB = new DataSource(ormDataSourceConfigOptions);
