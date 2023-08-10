@@ -59,6 +59,12 @@ export const getUserByIdHandler: RequestHandler<{}, User[], any, { [key: string]
   if (!userId) {
     next(ErrorService.getMissingReqParamsError(req.params, 'id'));
   }
+
+  if (isNaN(Number(userId))) {
+    renderFallbackPage(req, res, next);
+    return;
+  }
+
   try {
     const userById: User[] = await getUserById(userId);
     return res.status(200).send(userById);
@@ -85,6 +91,14 @@ export const createNewUserHandler: RequestHandler<{}, NewUserResponse, NewUser> 
   } catch(err) {
     next(err);
   }
+}
+
+export const renderFallbackPage: RequestHandler = (
+  _req: Request,
+  res: Response,
+  _next: NextFunction
+): void => {
+  return res.status(404).render('fallback');
 }
 
 // export const resetPassword: RequestHandler<{}, any, PasswordResetPayload> = async (

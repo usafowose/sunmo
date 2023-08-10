@@ -1,6 +1,6 @@
 import { Router } from "express";
 import * as express from 'express';
-import { getUsersHandler, getUnregisteredUsersHandler, getUserByIdHandler, createNewUserHandler, /* updateEmailHandler */ } from "../handlers";
+import { getUsersHandler, getUnregisteredUsersHandler, getUserByIdHandler, createNewUserHandler, renderFallbackPage /* updateEmailHandler */ } from "../handlers";
 
 export class UserRouter {
   private static _router: Router = express.Router();
@@ -17,14 +17,13 @@ export class UserRouter {
 
     this._router.post('/', [createNewUserHandler]);
 
-
     // this._router.post('/reset-password', [/*authMiddleware*/, /*tokenMiddleware*/]);
     // this._router.post('/update-password', [/*authMiddleware*/, /*tokenMiddleware*/]);
 
 
     // this.router.patch('/updateEmail', updateEmailHandler);
 
-
+    this._router.all('*', [renderFallbackPage]);
 
     return this._router;
   }
