@@ -1,7 +1,8 @@
+import { stringify } from "querystring";
 import { UserAccessLayer } from "../data/access/userData";
 import { User } from "../data/models/orm-entities/userentity";
 import { CreateUserInput } from "../data/models/profile";
-import { UserFilterInput } from "../data/models/user";
+import { NewUser, NewUserResponse, UserFilterInput } from "../data/models/user";
 import { UserKey } from "../routes/handlers";
 
 
@@ -75,6 +76,33 @@ export class UserService {
     try {
       let unregisteredUsers = await this._userAccessLayer.getUnregisteredUsers();
       return unregisteredUsers;
+    } catch(err) {
+      throw err;
+    }
+  }
+
+  async createNewRegisteredUser(user: NewUser): Promise<NewUserResponse> { //do you need this why not just profile
+    const { email, dob } = user;
+    try {
+      const doesUserExist = await this.doesUserExist(email, dob);
+      if (doesUserExist) {
+        return 
+      }
+      let registeredUser: NewUser = { ...user, is_registered: true }
+      const newUserData: NewUserResponse = await this._userAccessLayer.createRegisteredUser(registeredUser);
+      return newUserData;
+    } catch(err) {
+      throw err;
+    }
+  }
+
+  async doesUserExist(email: string, dob: Date): Promise<boolean> {
+    try {
+      const match =  !!(await this._userAccessLayer.getUsersWhere({ email, dob})).length;
+      if (match) {
+        return true;
+      }
+      return false;
     } catch(err) {
       throw err;
     }

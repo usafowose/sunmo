@@ -2,12 +2,13 @@ import { NextFunction, Request, RequestHandler, Response } from "express";
 import { sqlDB } from "../../data/management";
 import { User } from '../../data/models';
 import { 
-  getAllUsers, getPendingUsers, getUserById, getUsersWithFilters,
+  getAllUsers, getPendingUsers, getUserById, getUsersWithFilters, createNewUser, doesUserExist,
   // resetUserPassword, updateEmail
 } from '../../controllers/userController';
 import  { APIError, APIRoute, ErrorService, ProfileHandlerMethod, } from '../../services';
 import { mockUserInput } from "../../data/mock/user";
 import { createFilterMapFromRequest } from "../../utils/filtermap";
+import { NewUser, NewUserResponse } from "../../data/models/user";
 
 export type UserKey = keyof Partial<Pick<User, 'first_name' | 'email' | 'last_name' | 'user_name'>>;
 
@@ -63,6 +64,26 @@ export const getUserByIdHandler: RequestHandler<{}, User[], any, { [key: string]
     return res.status(200).send(userById);
   } catch (err) {
     next(err)
+  }
+}
+
+export const createNewUserHandler: RequestHandler<{}, NewUserResponse, NewUser> = async (
+  req: Request<{}, NewUserResponse, NewUser>,
+  res: Response<NewUserResponse>,
+  next: NextFunction,
+): Promise<Response<NewUserResponse>> => {
+  const { body } = req;
+  const { dob, email } = body;
+  try {
+    const userExists = await doesUserExist(email, dob);
+    if (userExists) {
+      return res.status(409).send();
+    }
+
+    const newUserData: NewUserResponse = await createNewUser(body);
+    return res.status(201).send(newUserData);
+  } catch(err) {
+    next(err);
   }
 }
 

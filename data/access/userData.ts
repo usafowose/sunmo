@@ -5,7 +5,7 @@ import { UserKey } from '../../routes/handlers';
 import { connectionManager1, sqlDB } from "../management";
 import { User } from "../models";
 import { CreateUserInput } from '../models/profile';
-import { UserFilterInput } from '../models/user';
+import { NewUser, NewUserResponse, UserFilterInput } from '../models/user';
 import { StandardQueryBuilder } from "../../utils/querybuilder";
 
 export class UserAccessLayer {
@@ -63,6 +63,22 @@ export class UserAccessLayer {
     try {
       return await this._userRepo.findBy({'is_registered': false});
     } catch (err) {
+      throw err;
+    }
+  }
+
+  async createRegisteredUser(user: NewUser): Promise<NewUserResponse> {
+    try {
+      const { user_id, user_name, first_name, last_name, dob, email } = await this._userRepo.save(user);
+      return {
+        user_id,
+        user_name,
+        first_name,
+        last_name,
+        dob,
+        email
+      };
+    } catch(err) {
       throw err;
     }
   }

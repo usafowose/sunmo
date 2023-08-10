@@ -1,4 +1,5 @@
 import { User } from "../data/models";
+import { NewUser, NewUserResponse } from "../data/models/user";
 import { UserKey } from "../routes/handlers";
 import { APIError, ErrorService, UserService } from '../services';
 
@@ -134,6 +135,45 @@ export const getUsersWithFilters = async (filters: Map<UserKey, any>): Promise<U
     const filteredUsers: User[] = await userService.getUsersWhere(filters);
     return filteredUsers;
   } catch(err) {
+    if (err.code) {
+      if (err.message) {
+        throw new APIError(err.code, err.message);
+      }
+      throw new APIError(err.code, ErrorService.defaultErrorMessage)
+    } else {
+      if (err.message) {
+        throw new APIError(500, err.message);
+      }
+
+      throw ErrorService.defaultError();
+    }
+  }
+}
+
+export const createNewUser = async (user: NewUser): Promise<NewUserResponse> => {
+  try {
+    const newUser: NewUserResponse = await userService.createNewRegisteredUser(user);
+    return newUser;
+  } catch(err) {
+    if (err.code) {
+      if (err.message) {
+        throw new APIError(err.code, err.message);
+      }
+      throw new APIError(err.code, ErrorService.defaultErrorMessage)
+    } else {
+      if (err.message) {
+        throw new APIError(500, err.message);
+      }
+
+      throw ErrorService.defaultError();
+    }
+  }
+}
+
+export const doesUserExist = async (email: string, dob: Date): Promise<boolean> => {
+  try {
+    return await userService.doesUserExist(email, dob);
+  } catch (err) {
     if (err.code) {
       if (err.message) {
         throw new APIError(err.code, err.message);
