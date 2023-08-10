@@ -84,10 +84,6 @@ export class UserService {
   async createNewRegisteredUser(user: NewUser): Promise<NewUserResponse> { //do you need this why not just profile
     const { email, dob } = user;
     try {
-      const doesUserExist = await this.doesUserExist(email, dob);
-      if (doesUserExist) {
-        return 
-      }
       let registeredUser: NewUser = { ...user, is_registered: true }
       const newUserData: NewUserResponse = await this._userAccessLayer.createRegisteredUser(registeredUser);
       return newUserData;
