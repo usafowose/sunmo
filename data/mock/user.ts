@@ -1,7 +1,7 @@
 import { User } from "../models";
-import { UserFilterInput } from "../models/user";
+import { UsersWhereFilter } from "../models/user";
 
-export const mockUserInput: UserFilterInput = {
+export const mockUserInput: UsersWhereFilter = {
   first_name: 'Andrew',
   last_name: 'Andrews',
   email: 'usafowose@gmail.com',

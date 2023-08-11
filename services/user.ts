@@ -2,7 +2,7 @@ import { stringify } from "querystring";
 import { UserAccessLayer } from "../data/access/userData";
 import { User } from "../data/models/orm-entities/userentity";
 import { CreateUserInput } from "../data/models/profile";
-import { NewUser, NewUserResponse, UserFilterInput } from "../data/models/user";
+import { NewUser, NewUserResponse, UsersWhereFilter, UserUpdatedResponse } from "../data/models/user";
 import { UserKey } from "../routes/handlers";
 
 
@@ -34,7 +34,7 @@ export class UserService {
   async createPendingUser(user: CreateUserInput): Promise<User> {
     const unregisteredUserObj: CreateUserInput & Pick<User, 'is_registered'> = {
       ...user,
-      is_registered: false 
+      is_registered: false
     };
 
     try {
@@ -55,7 +55,7 @@ export class UserService {
   }
 
   async getUsersWhere(filters: Map<UserKey, any>): Promise<User[]> {
-    const filterObj: UserFilterInput = Object.fromEntries(filters.entries());
+    const filterObj: UsersWhereFilter = Object.fromEntries(filters.entries());
     try {
       const results: User[] = await this._userAccessLayer.getUsersWhere(filterObj);
       return results;
@@ -64,13 +64,17 @@ export class UserService {
     }
   }
 
-  // async changeUserEmail(userId: string, newEmail: string): Promise< void> {
-  //   try {
-  //     await this._userAccessLayer.updateEmail(userId, newEmail);
-  //   } catch (err) {
-  //     throw err;
-  //   }
-  // }
+  async updateUserEmail(user_id: string, newEmail: string): Promise<UserUpdatedResponse> {
+    try {
+      // TODO(afowose): Check for newEmail prior existence.
+      let result = await this._userAccessLayer.updateEmail(+user_id, newEmail);
+      if (result) {
+        return result; //FROM HERE
+      }
+    } catch (err) {
+      throw err;
+    }
+  }
 
   async getAllPendingUsers(): Promise<User[]> {
     try {
@@ -91,6 +95,8 @@ export class UserService {
       throw err;
     }
   }
+
+
 
   async doesUserExist(email: string, dob: Date): Promise<boolean> {
     try {

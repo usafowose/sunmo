@@ -2,13 +2,13 @@ import { NextFunction, Request, RequestHandler, Response } from "express";
 import { sqlDB } from "../../data/management";
 import { User } from '../../data/models';
 import { 
-  getAllUsers, getPendingUsers, getUserById, getUsersWithFilters, createNewUser, doesUserExist,
+  getAllUsers, getPendingUsers, getUserById, getUsersWithFilters, createNewUser, doesUserExist, updateEmail,
   // resetUserPassword, updateEmail
 } from '../../controllers/userController';
 import  { APIError, APIRoute, ErrorService, ProfileHandlerMethod, } from '../../services';
 import { mockUserInput } from "../../data/mock/user";
 import { createFilterMapFromRequest } from "../../utils/filtermap";
-import { NewUser, NewUserResponse } from "../../data/models/user";
+import { NewUser, NewUserResponse, UserUpdatedResponse } from "../../data/models/user";
 
 export type UserKey = keyof Partial<Pick<User, 'first_name' | 'email' | 'last_name' | 'user_name'>>;
 
@@ -101,36 +101,26 @@ export const renderFallbackPage: RequestHandler = (
   return res.status(404).render('fallback');
 }
 
-// export const resetPassword: RequestHandler<{}, any, PasswordResetPayload> = async (
-//   req: Request<{}, any, PasswordResetPayload>,
-//   res: Response<void>,
-//   next: NextFunction,
-// ): Promise<Response<void>> => {
-//   const { body: reqBody } = req;
-//   if (!reqBody?.userId || !reqBody?.newPassword) {
-//     throw new APIError(400, 'No password provided');
-//   }
+export const updateEmailHandler: RequestHandler<{}, any, Pick<User, 'email' | 'user_id'> & Partial<Pick<User, 'user_name'>>> = async (
+  req: Request<{}, any, Pick<User, 'email' | 'user_id'> & Partial<Pick<User, 'user_name'>>>,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  const { user_id, email } = req.body;
+  if (!user_id || !email) {
+    res.status(401).send();
+    return;
+  }
 
-//   try {
-//     await resetUserPassword(reqBody.userId, reqBody.newPassword);
-//     return res.status(200);
-//   } catch (err) {
-//     next(err);
-//   }
-// }
+  if (isNaN(Number(user_id))) {
+    res.status(404).send(); //TODO(AFOWOSE): Send unified response object
+    return;
+  }
 
-// export const updateEmailHandler: RequestHandler<{}, any, Pick<User, 'email' | 'user_id'> & Partial<Pick<User, 'user_name'>>> = async (
-//   req: Request<{}, any, Pick<User, 'email' | 'user_id'> & Partial<Pick<User, 'user_name'>>>,
-//   res: Response,
-//   next: NextFunction
-// ): Promise<void> => {
-//   const { user_id, email } = req.body;
-//   if (!user_id || !email) {
-//     throw(new APIError(500))
-//   }
-//   try {
-//     await updateEmail(String(user_id), email);
-//   } catch (err) {
-//     next(err);
-//   }
-// }
+  try {
+    const updatedUserInfo: UserUpdatedResponse<'email'> = await updateEmail(user_id, email);
+    res.status(200).send(updatedUserInfo);
+  } catch (err) {
+    next(err);
+  }
+}
