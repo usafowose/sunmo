@@ -1,9 +1,5 @@
-import { raw } from "express";
 import { ProfileAccessLayer } from "../data/access/profileData";
-import { connectionManager1 } from "../data/management";
 import { Profile } from "../data/models/orm-entities/profileentity";
-import { ProfileResult } from "../data/models/profile";
-
 
 // Perform any data transformation or validation specific to the business logic of the profiles
 // Mapping Request Data To Appropriate Format
@@ -21,15 +17,14 @@ import { ProfileResult } from "../data/models/profile";
     // if invited?
     // if first, ..... work out logic withing service and members
     //  necesaary notifications or relationship verification requests sent
-  // 
+  //
 
-//  Backend Busness Logic: 
+//  Backend Busness Logic:
 // When user wants to create profile:
   // ensure new profile
   // make neccessary calls to create profile ** include familyID in call;
   // add profile to family tree table with verification status indication
   // Send verification requests via InvitiationService (to only closest members & from within family tree service)
-
 
 export class ProfileService {
   private _profileAccessLayer: ProfileAccessLayer;
@@ -37,7 +32,7 @@ export class ProfileService {
   constructor() {
     this._profileAccessLayer = new ProfileAccessLayer();
   }
-  
+
   async getProfileById(id: string): Promise<Profile> {
     try {
       //TODO (afowose): remove this from any type and return raw type straight from DAL to be transformed into Profile type
@@ -69,7 +64,7 @@ export class ProfileService {
 
   async deleteProfile(id: string): Promise<void> {
     try {
-      await this._profileAccessLayer.deleteProfile(id)
+      await this._profileAccessLayer.deleteProfile(id);
     } catch (err) {
       console.error(err);
     }

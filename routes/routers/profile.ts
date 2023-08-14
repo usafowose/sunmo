@@ -1,8 +1,6 @@
 import * as express from 'express';
-import { NextFunction, Request, RequestHandler, Response, Router } from 'express';
-import { sqlDB } from '../../data/management';
-import { User } from '../../data/models';
-import { APIError, ProfileHandlerMethod } from '../../services/errorservice';
+import { Router } from 'express';
+
 import { /*createProfileHandler as createProfile,*/
   getProfileByIdHandler as getProfileById ,
   getAllProfilesHandler
@@ -19,6 +17,3 @@ export class ProfileRouter {
   }
 
 }
-
-
-

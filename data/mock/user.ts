@@ -1,4 +1,3 @@
-import { User } from "../models";
 import { UsersWhereFilter } from "../models/user";
 
 export const mockUserInput: UsersWhereFilter = {

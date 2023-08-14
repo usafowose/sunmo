@@ -1,5 +1,5 @@
 import { Profile } from "../data/models";
-import { APIError, APIRoute, ErrorService, ProfileHandlerMethod } from "../services/errorservice";
+import { APIError, ErrorService } from "../services/errorservice";
 import {ProfileService} from '../services/profile';
 
 const profileService = new ProfileService();
@@ -14,7 +14,7 @@ export const getAllProfiles = async (): Promise<Profile[]> => {
       if (err.message) {
         throw new APIError(err.message, err.code);
       }
-      throw new APIError(err.code, ErrorService.defaultErrorMessage)
+      throw new APIError(err.code, ErrorService.defaultErrorMessage);
     } else {
       if (err.message) {
         throw new APIError(500, err.message);
@@ -22,7 +22,7 @@ export const getAllProfiles = async (): Promise<Profile[]> => {
       throw ErrorService.defaultError();
     }
   }
-}
+};
 
 export const getProfileById = async (profileId: string): Promise<Profile> => {
   try {
@@ -42,6 +42,4 @@ export const getProfileById = async (profileId: string): Promise<Profile> => {
       throw ErrorService.defaultError();
     }
   }
-}
-
-
+};

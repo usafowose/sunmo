@@ -22,8 +22,8 @@ export const getUsersHandler: RequestHandler = async (
   next: NextFunction
 ): Promise<Response<User[]>> => {
   try {
-    if (!!Object.keys(req.query).length) {
-      let filters = createFilterMapFromRequest<UserKey>(req.query, mockUserInput);
+    if (Object.keys(req.query).length) {
+      const filters = createFilterMapFromRequest<UserKey>(req.query, mockUserInput);
       const filteredUsers: User[] = await getUsersWithFilters(filters);
       return res.status(200).send(filteredUsers);
     }
@@ -33,7 +33,7 @@ export const getUsersHandler: RequestHandler = async (
     const error = err as APIError;
     next(error);
   }
-}
+};
 
 export const getUnregisteredUsersHandler: RequestHandler = async (
   req: Request,
@@ -46,10 +46,11 @@ export const getUnregisteredUsersHandler: RequestHandler = async (
   } catch(err) {
     next(err);
   }
-}
+};
 
-export const getUserByIdHandler: RequestHandler<{}, User[], any, { [key: string]: string }> = async (
-  req: Request,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const getUserByIdHandler: RequestHandler<{id: string}, User[], any, any> = async (
+  req: Request<{id: string}>,
   res: Response<User[]>,
   next: NextFunction
 ): Promise<Response<User[]>> => {
@@ -57,6 +58,7 @@ export const getUserByIdHandler: RequestHandler<{}, User[], any, { [key: string]
 
   if (!userId) {
     next(ErrorService.getMissingReqParamsError(req.params, 'id'));
+    return;
   }
 
   if (isNaN(Number(userId))) {
@@ -68,12 +70,12 @@ export const getUserByIdHandler: RequestHandler<{}, User[], any, { [key: string]
     const userById: User[] = await getUserById(userId);
     return res.status(200).send(userById);
   } catch (err) {
-    next(err)
+    next(err);
   }
-}
+};
 
-export const createNewUserHandler: RequestHandler<{}, NewUserResponse, NewUser> = async (
-  req: Request<{}, NewUserResponse, NewUser>,
+export const createNewUserHandler: RequestHandler<{ [key: string]: string }, NewUserResponse, NewUser> = async (
+  req: Request<{ [key: string]: string }, NewUserResponse, NewUser>,
   res: Response<NewUserResponse>,
   next: NextFunction,
 ): Promise<Response<NewUserResponse>> => {
@@ -90,7 +92,7 @@ export const createNewUserHandler: RequestHandler<{}, NewUserResponse, NewUser> 
   } catch(err) {
     next(err);
   }
-}
+};
 
 export const renderFallbackPage: RequestHandler = (
   _req: Request,
@@ -101,8 +103,8 @@ export const renderFallbackPage: RequestHandler = (
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const updateEmailHandler: RequestHandler<object, any, UpdateEmailRequestBody> = async (
-  req: Request<object, any, UpdateEmailRequestBody>,
+export const updateEmailHandler: RequestHandler<{ [key: string]: string }, any, UpdateEmailRequestBody> = async (
+  req: Request<{ [key: string]: string }, any, UpdateEmailRequestBody>, // eslint-disable-line @typescript-eslint/no-explicit-any
   res: Response,
   next: NextFunction
 ): Promise<void> => {
@@ -136,4 +138,4 @@ export const updateEmailHandler: RequestHandler<object, any, UpdateEmailRequestB
   } catch (err) {
     next(err);
   }
-}
+};

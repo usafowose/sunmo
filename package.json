@@ -3,7 +3,7 @@
    "version": "0.0.1",
    "main": "build/server.js",
    "description": "family tree backend developed with node, express, typeorm, mysql2 for custom queries, and JWT",
-   "type": "module",
+   "type": "commonjs",
    "dependencies": {
       "@types/express": "^4.17.17",
       "dotenv": "^16.3.1",

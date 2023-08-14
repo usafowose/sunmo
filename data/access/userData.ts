@@ -1,18 +1,19 @@
+/* eslint-disable no-useless-catch */
 import { Pool } from 'mysql2/promise';
 import { Repository } from "typeorm";
-import { UserKey } from '../../routes/handlers';
 
+import { StandardQueryBuilder } from "../../utils/querybuilder";
 import { connectionManager1, sqlDB } from "../management";
 import { User } from "../models";
 import { CreateUserInput } from '../models/profile';
 import { NewUser, NewUserResponse, UsersWhereFilter, UserUpdatedResponse } from '../models/user';
-import { StandardQueryBuilder } from "../../utils/querybuilder";
 
 export class UserAccessLayer {
   private _inbuiltConnection: Pool = connectionManager1.connectionPool;
   private _queryBuilder: StandardQueryBuilder = new StandardQueryBuilder();
   private _userRepo: Repository<User> = sqlDB.getRepository(User);
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   constructor() { }
 
   async getAllUsers(): Promise<User[]> {
@@ -86,7 +87,7 @@ export class UserAccessLayer {
   async updateEmail(user_id: number, email: string): Promise<UserUpdatedResponse | null> {
     try {
       const { affected } = await this._userRepo.update(user_id, { email });
-      return !!affected ? {user_id, email } : null;
+      return affected ? {user_id, email } : null;
     } catch(err) {
       throw err;
     }

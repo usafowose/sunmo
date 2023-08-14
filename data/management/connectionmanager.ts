@@ -1,9 +1,10 @@
+import * as dotenv from 'dotenv';
 import { createPool, PoolOptions, Pool } from "mysql2/promise";
-import { DataSource, DataSourceOptions, FileLogger } from "typeorm";
-import "reflect-metadata"
+import "reflect-metadata";
+import { DataSource, DataSourceOptions } from "typeorm";
+
 import { User } from "../models";
 import { Profile } from "../models/orm-entities/profileentity";
-import * as dotenv from 'dotenv';
 dotenv.config();
 
 class InbuiltConnectionManager {

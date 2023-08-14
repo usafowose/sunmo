@@ -195,7 +195,7 @@ export const isEmailTaken = async(email:string): Promise<boolean> => {
       if (err.message) {
         throw new APIError(err.code, err.message);
       }
-      throw new APIError(err.code, ErrorService.defaultErrorMessage)
+      throw new APIError(err.code, ErrorService.defaultErrorMessage);
     } else {
       if (err.message) {
         throw new APIError(500, err.message);
