@@ -85,49 +85,7 @@ export const getUsersByLastName = async (lastName: string): Promise<User[]> => {
       throw ErrorService.defaultError();
     }
   }
-}
-
-// export const resetUserPassword = (userId: string, newPassword): Promise<void> => {
-//     return Promise.resolve();
-// }
-
-// export const changeUserName = async (newUserName: string): Promise<void> => {
-//   try {
-//     await userService.changeUserName(newUserName);
-//   } catch(err) {
-//     if (err.code) {
-//       if (err.message) {
-//         throw new APIError(err.code, err.message);
-//       }
-//       throw new APIError(err.code, ErrorService.defaultErrorMessage)
-//     } else {
-//       if (err.message) {
-//         throw new APIError(500, err.message);
-//       }
-
-//       throw ErrorService.defaultError();
-//     }
-//   }
-// }
-
-// export const changeUserEmail = async (userId: string, newEmail: string): Promise<void> => {
-//   try {
-//     await userService.changeUserEmail(userId, newEmail);
-//   } catch(err) {
-//     if (err.code) {
-//       if (err.message) {
-//         throw new APIError(err.code, err.message);
-//       }
-//       throw new APIError(err.code, ErrorService.defaultErrorMessage)
-//     } else {
-//       if (err.message) {
-//         throw new APIError(500, err.message);
-//       }
-
-//       throw ErrorService.defaultError();
-//     }
-//   }
-// }
+};
 
 export const getUsersWithFilters = async (filters: Map<UserKey, any>): Promise<User[]> => {// eslint-disable-line @typescript-eslint/no-explicit-any
   try {
@@ -208,7 +166,7 @@ export const findExistenceForUpdate = async(user_id: string): Promise<boolean> =
       throw ErrorService.defaultError();
     }
   }
-}
+};
 
 export const doesUserExist = async(email: string, dob: Date): Promise<boolean> => {
   try {
