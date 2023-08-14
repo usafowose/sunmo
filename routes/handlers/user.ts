@@ -108,12 +108,12 @@ export const updateEmailHandler: RequestHandler<{}, any, UpdateEmailRequestBody>
 ): Promise<void> => {
   const { user_id, email } = req.body;
   if (!user_id || !email) {
-    res.status(401).send();
+    res.status(400).send();
     return;
   }
 
   if (isNaN(Number(user_id))) { // (Move to validation?)
-    res.status(404).send(); //TODO(AFOWOSE): Send unified response object
+    res.status(400).send(); //TODO(AFOWOSE): Send unified response object
     return;
   }
 
@@ -126,7 +126,7 @@ export const updateEmailHandler: RequestHandler<{}, any, UpdateEmailRequestBody>
 
     const emailTaken = await isEmailTaken(email);
     if (emailTaken) {
-      res.status(401).json({message: 'Conflict: Email Taken'});
+      res.status(409).json({message: 'Conflict: Email Taken'});
       return;
     }
 
