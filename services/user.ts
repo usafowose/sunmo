@@ -66,7 +66,6 @@ export class UserService {
 
   async updateUserEmail(user_id: number, newEmail: string): Promise<UserUpdatedResponse> {
     try {
-      // TODO(afowose): Check for newEmail prior existence.
       let result = await this._userAccessLayer.updateEmail(user_id, newEmail);
       if (result) return result;
       throw new Error('something happened on update. No update, no throw');
@@ -113,5 +112,15 @@ export class UserService {
       throw err;
     }
   }
+
+  async isEmailTaken(email: string): Promise<boolean> {
+    try {
+      const emailTaken: boolean = !!await this._userAccessLayer.getFirstUserWhere({email});
+      return emailTaken ? true : false;
+    } catch(err) {
+      throw err;
+    }
+  }
+
 
 }

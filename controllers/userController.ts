@@ -229,3 +229,22 @@ export const doesUserExist = async(email: string, dob: Date): Promise<boolean> =
     }
   }
 }
+
+export const isEmailTaken = async(email:string): Promise<boolean> => {
+  try {
+    return !!await userService.isEmailTaken(email);
+  } catch(err) {
+    if (err.code) {
+      if (err.message) {
+        throw new APIError(err.code, err.message);
+      }
+      throw new APIError(err.code, ErrorService.defaultErrorMessage)
+    } else {
+      if (err.message) {
+        throw new APIError(500, err.message);
+      }
+
+      throw ErrorService.defaultError();
+    }
+  }
+}

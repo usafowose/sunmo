@@ -2,7 +2,7 @@ import { NextFunction, Request, RequestHandler, Response } from "express";
 import { sqlDB } from "../../data/management";
 import { User } from '../../data/models';
 import { 
-  getAllUsers, getPendingUsers, getUserById, getUsersWithFilters, createNewUser, doesUserExist, updateEmail, findExistenceForUpdate,
+  getAllUsers, getPendingUsers, getUserById, getUsersWithFilters, createNewUser, doesUserExist, updateEmail, findExistenceForUpdate, isEmailTaken,
   // resetUserPassword, updateEmail
 } from '../../controllers/userController';
 import  { APIError, APIRoute, ErrorService, ProfileHandlerMethod, } from '../../services';
@@ -113,7 +113,7 @@ export const updateEmailHandler: RequestHandler<{}, any, UpdateEmailRequestBody>
   }
 
   if (isNaN(Number(user_id))) { // (Move to validation?)
-    res.status(404).send(); //TODO(AFOWOSE): Send unified response object 
+    res.status(404).send(); //TODO(AFOWOSE): Send unified response object
     return;
   }
 
@@ -121,9 +121,18 @@ export const updateEmailHandler: RequestHandler<{}, any, UpdateEmailRequestBody>
     const userExists = await findExistenceForUpdate(String(user_id));
     if (!userExists) {
       res.status(404).json({message: 'No User Found'});
+      return;
     }
+
+    const emailTaken = await isEmailTaken(email);
+    if (emailTaken) {
+      res.status(401).json({message: 'Conflict: Email Taken'});
+      return;
+    }
+
     const updatedUserInfo: UserUpdatedResponse = await updateEmail(user_id, email);
     res.status(200).send(updatedUserInfo);
+    return;
   } catch (err) {
     next(err);
   }
