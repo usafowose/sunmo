@@ -52,7 +52,7 @@ export class UserAccessLayer {
 
   async getUsersWhere(userDataFilters: UsersWhereFilter): Promise<User[]> {
     try {
-      const results = await this._userRepo.findBy(userDataFilters)
+      const results = await this._userRepo.findBy(userDataFilters);
       return results;
     } catch(err) {
       throw err;
@@ -110,7 +110,7 @@ export class UserAccessLayer {
 
   async getFirstUserWhere(userDataFilters: UsersWhereFilter): Promise<User> {
     try {
-      const results = await this._userRepo.findOneBy(userDataFilters)
+      const results = await this._userRepo.findOneBy(userDataFilters);
       return results;
     } catch(err) {
       throw err;
