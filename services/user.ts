@@ -96,15 +96,19 @@ export class UserService {
     }
   }
 
-
+  async findExistenceForUpdate(user_id: string): Promise<boolean> {
+    try {
+      const userExists = await this._userAccessLayer.findExistenceForUpdate(+user_id);
+      return userExists;
+    } catch (err) {
+      throw err;
+    }
+  }
 
   async doesUserExist(email: string, dob: Date): Promise<boolean> {
     try {
-      const match =  !!(await this._userAccessLayer.getUsersWhere({ email, dob})).length;
-      if (match) {
-        return true;
-      }
-      return false;
+      const match =  !!await this._userAccessLayer.doesUserExist(email, dob);
+      return match;
     } catch(err) {
       throw err;
     }

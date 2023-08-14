@@ -91,4 +91,21 @@ export class UserAccessLayer {
       throw err;
     }
   }
+
+  async findExistenceForUpdate(user_id: number): Promise<boolean> {
+    try {
+      return !!await this._userRepo.findOne({where: {user_id}});
+    } catch(err) {
+      throw err;
+    }
+  }
+
+  async doesUserExist(email: string, dob: Date): Promise<boolean> {
+    try {
+      return !!await this._userRepo.findOne({where: {email, dob}});
+    } catch(err) {
+      throw err;
+    }
+  }
+
 }

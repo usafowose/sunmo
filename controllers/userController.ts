@@ -191,6 +191,26 @@ export const updateEmail = async(user_id: number, email: string): Promise<UserUp
   }
 }
 
+export const findExistenceForUpdate = async(user_id: string): Promise<boolean> => {
+  try {
+    const userExists = await userService.findExistenceForUpdate(user_id);
+    return userExists;
+  } catch(err) {
+    if (err.code) {
+      if (err.message) {
+        throw new APIError(err.code, err.message);
+      }
+      throw new APIError(err.code, ErrorService.defaultErrorMessage)
+    } else {
+      if (err.message) {
+        throw new APIError(500, err.message);
+      }
+
+      throw ErrorService.defaultError();
+    }
+  }
+}
+
 export const doesUserExist = async(email: string, dob: Date): Promise<boolean> => {
   try {
     return await userService.doesUserExist(email, dob);

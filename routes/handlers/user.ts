@@ -2,13 +2,13 @@ import { NextFunction, Request, RequestHandler, Response } from "express";
 import { sqlDB } from "../../data/management";
 import { User } from '../../data/models';
 import { 
-  getAllUsers, getPendingUsers, getUserById, getUsersWithFilters, createNewUser, doesUserExist, updateEmail,
+  getAllUsers, getPendingUsers, getUserById, getUsersWithFilters, createNewUser, doesUserExist, updateEmail, findExistenceForUpdate,
   // resetUserPassword, updateEmail
 } from '../../controllers/userController';
 import  { APIError, APIRoute, ErrorService, ProfileHandlerMethod, } from '../../services';
 import { mockUserInput } from "../../data/mock/user";
 import { createFilterMapFromRequest } from "../../utils/filtermap";
-import { NewUser, NewUserResponse, UserUpdatedResponse } from "../../data/models/user";
+import { NewUser, NewUserResponse, UpdateEmailRequestBody, UserUpdatedResponse } from "../../data/models/user";
 
 export type UserKey = keyof Partial<Pick<User, 'first_name' | 'email' | 'last_name' | 'user_name'>>;
 
@@ -101,8 +101,8 @@ export const renderFallbackPage: RequestHandler = (
   return res.status(404).render('fallback');
 }
 
-export const updateEmailHandler: RequestHandler<{}, any, Pick<User, 'email' | 'user_id'> & Partial<Pick<User, 'user_name'>>> = async (
-  req: Request<{}, any, Pick<User, 'email' | 'user_id'> & Partial<Pick<User, 'user_name'>>>,
+export const updateEmailHandler: RequestHandler<{}, any, UpdateEmailRequestBody> = async (
+  req: Request<{}, any, UpdateEmailRequestBody>,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
@@ -112,12 +112,16 @@ export const updateEmailHandler: RequestHandler<{}, any, Pick<User, 'email' | 'u
     return;
   }
 
-  if (isNaN(Number(user_id))) {
-    res.status(404).send(); //TODO(AFOWOSE): Send unified response object
+  if (isNaN(Number(user_id))) { // (Move to validation?)
+    res.status(404).send(); //TODO(AFOWOSE): Send unified response object 
     return;
   }
 
   try {
+    const userExists = await findExistenceForUpdate(String(user_id));
+    if (!userExists) {
+      res.status(404).json({message: 'No User Found'});
+    }
     const updatedUserInfo: UserUpdatedResponse = await updateEmail(user_id, email);
     res.status(200).send(updatedUserInfo);
   } catch (err) {
