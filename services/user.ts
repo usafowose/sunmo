@@ -64,14 +64,14 @@ export class UserService {
     }
   }
 
-  async updateUserEmail(user_id: string, newEmail: string): Promise<UserUpdatedResponse> {
+  async updateUserEmail(user_id: number, newEmail: string): Promise<UserUpdatedResponse> {
     try {
       // TODO(afowose): Check for newEmail prior existence.
-      let result = await this._userAccessLayer.updateEmail(+user_id, newEmail);
-      if (result) {
-        return result; //FROM HERE
-      }
+      let result = await this._userAccessLayer.updateEmail(user_id, newEmail);
+      if (result) return result;
+      throw new Error('something happened on update. No update, no throw');
     } catch (err) {
+      console.log(err.raw);
       throw err;
     }
   }

@@ -118,7 +118,7 @@ export const updateEmailHandler: RequestHandler<{}, any, Pick<User, 'email' | 'u
   }
 
   try {
-    const updatedUserInfo: UserUpdatedResponse<'email'> = await updateEmail(user_id, email);
+    const updatedUserInfo: UserUpdatedResponse = await updateEmail(user_id, email);
     res.status(200).send(updatedUserInfo);
   } catch (err) {
     next(err);

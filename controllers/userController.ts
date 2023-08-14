@@ -170,10 +170,11 @@ export const createNewUser = async(user: NewUser): Promise<NewUserResponse> => {
   }
 }
 
-export const updateEmail = async(user_id: number, email: string): Promise<UserUpdatedResponse<'email'> => {
+export const updateEmail = async(user_id: number, email: string): Promise<UserUpdatedResponse> => {
   try {
     //TODO(afowose) - send control to some email verification service. and await it's response, then
-    const updatedEmail = userService.updateUserEmail(user_id, email);
+    const response = await userService.updateUserEmail(user_id, email);
+    return response;
   } catch(err) {
     if (err.code) {
       if (err.message) {
