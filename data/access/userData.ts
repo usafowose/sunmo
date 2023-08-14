@@ -5,7 +5,7 @@ import { UserKey } from '../../routes/handlers';
 import { connectionManager1, sqlDB } from "../management";
 import { User } from "../models";
 import { CreateUserInput } from '../models/profile';
-import { NewUser, NewUserResponse, UserFilterInput } from '../models/user';
+import { NewUser, NewUserResponse, UsersWhereFilter, UserUpdatedResponse } from '../models/user';
 import { StandardQueryBuilder } from "../../utils/querybuilder";
 
 export class UserAccessLayer {
@@ -50,9 +50,9 @@ export class UserAccessLayer {
     }
   }
 
-  async getUsersWhere(filters: UserFilterInput): Promise<User[]> {
+  async getUsersWhere(userDataFilters: UsersWhereFilter): Promise<User[]> {
     try {
-      const results = await this._userRepo.findBy(filters)
+      const results = await this._userRepo.findBy(userDataFilters);
       return results;
     } catch(err) {
       throw err;
@@ -78,6 +78,40 @@ export class UserAccessLayer {
         dob,
         email
       };
+    } catch(err) {
+      throw err;
+    }
+  }
+
+  async updateEmail(user_id: number, email: string): Promise<UserUpdatedResponse | null> {
+    try {
+      const { affected } = await this._userRepo.update(user_id, { email });
+      return !!affected ? {user_id, email } : null;
+    } catch(err) {
+      throw err;
+    }
+  }
+
+  async findExistenceForUpdate(user_id: number): Promise<boolean> {
+    try {
+      return !!await this._userRepo.findOne({where: {user_id}});
+    } catch(err) {
+      throw err;
+    }
+  }
+
+  async doesUserExist(email: string, dob: Date): Promise<boolean> {
+    try {
+      return !!await this._userRepo.findOne({where: {email, dob}});
+    } catch(err) {
+      throw err;
+    }
+  }
+
+  async getFirstUserWhere(userDataFilters: UsersWhereFilter): Promise<User> {
+    try {
+      const results = await this._userRepo.findOneBy(userDataFilters);
+      return results;
     } catch(err) {
       throw err;
     }

@@ -2,13 +2,13 @@ import { NextFunction, Request, RequestHandler, Response } from "express";
 import { sqlDB } from "../../data/management";
 import { User } from '../../data/models';
 import { 
-  getAllUsers, getPendingUsers, getUserById, getUsersWithFilters, createNewUser, doesUserExist,
+  getAllUsers, getPendingUsers, getUserById, getUsersWithFilters, createNewUser, doesUserExist, updateEmail, findExistenceForUpdate, isEmailTaken,
   // resetUserPassword, updateEmail
 } from '../../controllers/userController';
 import  { APIError, APIRoute, ErrorService, ProfileHandlerMethod, } from '../../services';
 import { mockUserInput } from "../../data/mock/user";
 import { createFilterMapFromRequest } from "../../utils/filtermap";
-import { NewUser, NewUserResponse } from "../../data/models/user";
+import { NewUser, NewUserResponse, UpdateEmailRequestBody, UserUpdatedResponse } from "../../data/models/user";
 
 export type UserKey = keyof Partial<Pick<User, 'first_name' | 'email' | 'last_name' | 'user_name'>>;
 
@@ -59,6 +59,12 @@ export const getUserByIdHandler: RequestHandler<{}, User[], any, { [key: string]
   if (!userId) {
     next(ErrorService.getMissingReqParamsError(req.params, 'id'));
   }
+
+  if (isNaN(Number(userId))) {
+    renderFallbackPage(req, res, next);
+    return;
+  }
+
   try {
     const userById: User[] = await getUserById(userId);
     return res.status(200).send(userById);
@@ -87,36 +93,47 @@ export const createNewUserHandler: RequestHandler<{}, NewUserResponse, NewUser> 
   }
 }
 
-// export const resetPassword: RequestHandler<{}, any, PasswordResetPayload> = async (
-//   req: Request<{}, any, PasswordResetPayload>,
-//   res: Response<void>,
-//   next: NextFunction,
-// ): Promise<Response<void>> => {
-//   const { body: reqBody } = req;
-//   if (!reqBody?.userId || !reqBody?.newPassword) {
-//     throw new APIError(400, 'No password provided');
-//   }
+export const renderFallbackPage: RequestHandler = (
+  _req: Request,
+  res: Response,
+  _next: NextFunction
+): void => {
+  return res.status(404).render('fallback');
+}
 
-//   try {
-//     await resetUserPassword(reqBody.userId, reqBody.newPassword);
-//     return res.status(200);
-//   } catch (err) {
-//     next(err);
-//   }
-// }
+export const updateEmailHandler: RequestHandler<{}, any, UpdateEmailRequestBody> = async (
+  req: Request<{}, any, UpdateEmailRequestBody>,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  const { user_id, email } = req.body;
+  if (!user_id || !email) {
+    res.status(400).send();
+    return;
+  }
 
-// export const updateEmailHandler: RequestHandler<{}, any, Pick<User, 'email' | 'user_id'> & Partial<Pick<User, 'user_name'>>> = async (
-//   req: Request<{}, any, Pick<User, 'email' | 'user_id'> & Partial<Pick<User, 'user_name'>>>,
-//   res: Response,
-//   next: NextFunction
-// ): Promise<void> => {
-//   const { user_id, email } = req.body;
-//   if (!user_id || !email) {
-//     throw(new APIError(500))
-//   }
-//   try {
-//     await updateEmail(String(user_id), email);
-//   } catch (err) {
-//     next(err);
-//   }
-// }
+  if (isNaN(Number(user_id))) { // (Move to validation?)
+    res.status(400).send(); //TODO(AFOWOSE): Send unified response object
+    return;
+  }
+
+  try {
+    const userExists = await findExistenceForUpdate(String(user_id));
+    if (!userExists) {
+      res.status(404).json({message: 'No User Found'});
+      return;
+    }
+
+    const emailTaken = await isEmailTaken(email);
+    if (emailTaken) {
+      res.status(409).json({message: 'Conflict: Email Taken'});
+      return;
+    }
+
+    const updatedUserInfo: UserUpdatedResponse = await updateEmail(user_id, email);
+    res.status(200).send(updatedUserInfo);
+    return;
+  } catch (err) {
+    next(err);
+  }
+}

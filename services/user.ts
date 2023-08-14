@@ -2,7 +2,7 @@ import { stringify } from "querystring";
 import { UserAccessLayer } from "../data/access/userData";
 import { User } from "../data/models/orm-entities/userentity";
 import { CreateUserInput } from "../data/models/profile";
-import { NewUser, NewUserResponse, UserFilterInput } from "../data/models/user";
+import { NewUser, NewUserResponse, UsersWhereFilter, UserUpdatedResponse } from "../data/models/user";
 import { UserKey } from "../routes/handlers";
 
 
@@ -34,7 +34,7 @@ export class UserService {
   async createPendingUser(user: CreateUserInput): Promise<User> {
     const unregisteredUserObj: CreateUserInput & Pick<User, 'is_registered'> = {
       ...user,
-      is_registered: false 
+      is_registered: false
     };
 
     try {
@@ -55,7 +55,7 @@ export class UserService {
   }
 
   async getUsersWhere(filters: Map<UserKey, any>): Promise<User[]> {
-    const filterObj: UserFilterInput = Object.fromEntries(filters.entries());
+    const filterObj: UsersWhereFilter = Object.fromEntries(filters.entries());
     try {
       const results: User[] = await this._userAccessLayer.getUsersWhere(filterObj);
       return results;
@@ -64,13 +64,16 @@ export class UserService {
     }
   }
 
-  // async changeUserEmail(userId: string, newEmail: string): Promise< void> {
-  //   try {
-  //     await this._userAccessLayer.updateEmail(userId, newEmail);
-  //   } catch (err) {
-  //     throw err;
-  //   }
-  // }
+  async updateUserEmail(user_id: number, newEmail: string): Promise<UserUpdatedResponse> {
+    try {
+      let result = await this._userAccessLayer.updateEmail(user_id, newEmail);
+      if (result) return result;
+      throw new Error('something happened on update. No update, no throw');
+    } catch (err) {
+      console.log(err.raw);
+      throw err;
+    }
+  }
 
   async getAllPendingUsers(): Promise<User[]> {
     try {
@@ -84,10 +87,6 @@ export class UserService {
   async createNewRegisteredUser(user: NewUser): Promise<NewUserResponse> { //do you need this why not just profile
     const { email, dob } = user;
     try {
-      const doesUserExist = await this.doesUserExist(email, dob);
-      if (doesUserExist) {
-        return 
-      }
       let registeredUser: NewUser = { ...user, is_registered: true }
       const newUserData: NewUserResponse = await this._userAccessLayer.createRegisteredUser(registeredUser);
       return newUserData;
@@ -96,16 +95,32 @@ export class UserService {
     }
   }
 
+  async findExistenceForUpdate(user_id: string): Promise<boolean> {
+    try {
+      const userExists = await this._userAccessLayer.findExistenceForUpdate(+user_id);
+      return userExists;
+    } catch (err) {
+      throw err;
+    }
+  }
+
   async doesUserExist(email: string, dob: Date): Promise<boolean> {
     try {
-      const match =  !!(await this._userAccessLayer.getUsersWhere({ email, dob})).length;
-      if (match) {
-        return true;
-      }
-      return false;
+      const match =  !!await this._userAccessLayer.doesUserExist(email, dob);
+      return match;
     } catch(err) {
       throw err;
     }
   }
+
+  async isEmailTaken(email: string): Promise<boolean> {
+    try {
+      const emailTaken: boolean = !!await this._userAccessLayer.getFirstUserWhere({email});
+      return emailTaken ? true : false;
+    } catch(err) {
+      throw err;
+    }
+  }
+
 
 }

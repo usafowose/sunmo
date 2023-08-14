@@ -1,5 +1,5 @@
 import { User } from "../data/models";
-import { NewUser, NewUserResponse } from "../data/models/user";
+import { NewUser, NewUserResponse, UserUpdatedResponse } from "../data/models/user";
 import { UserKey } from "../routes/handlers";
 import { APIError, ErrorService, UserService } from '../services';
 
@@ -150,7 +150,7 @@ export const getUsersWithFilters = async (filters: Map<UserKey, any>): Promise<U
   }
 }
 
-export const createNewUser = async (user: NewUser): Promise<NewUserResponse> => {
+export const createNewUser = async(user: NewUser): Promise<NewUserResponse> => {
   try {
     const newUser: NewUserResponse = await userService.createNewRegisteredUser(user);
     return newUser;
@@ -170,10 +170,70 @@ export const createNewUser = async (user: NewUser): Promise<NewUserResponse> => 
   }
 }
 
-export const doesUserExist = async (email: string, dob: Date): Promise<boolean> => {
+export const updateEmail = async(user_id: number, email: string): Promise<UserUpdatedResponse> => {
+  try {
+    //TODO(afowose) - send control to some email verification service. and await it's response, then
+    const response = await userService.updateUserEmail(user_id, email);
+    return response;
+  } catch(err) {
+    if (err.code) {
+      if (err.message) {
+        throw new APIError(err.code, err.message);
+      }
+      throw new APIError(err.code, ErrorService.defaultErrorMessage)
+    } else {
+      if (err.message) {
+        throw new APIError(500, err.message);
+      }
+
+      throw ErrorService.defaultError();
+    }
+  }
+}
+
+export const findExistenceForUpdate = async(user_id: string): Promise<boolean> => {
+  try {
+    const userExists = await userService.findExistenceForUpdate(user_id);
+    return userExists;
+  } catch(err) {
+    if (err.code) {
+      if (err.message) {
+        throw new APIError(err.code, err.message);
+      }
+      throw new APIError(err.code, ErrorService.defaultErrorMessage)
+    } else {
+      if (err.message) {
+        throw new APIError(500, err.message);
+      }
+
+      throw ErrorService.defaultError();
+    }
+  }
+}
+
+export const doesUserExist = async(email: string, dob: Date): Promise<boolean> => {
   try {
     return await userService.doesUserExist(email, dob);
   } catch (err) {
+    if (err.code) {
+      if (err.message) {
+        throw new APIError(err.code, err.message);
+      }
+      throw new APIError(err.code, ErrorService.defaultErrorMessage)
+    } else {
+      if (err.message) {
+        throw new APIError(500, err.message);
+      }
+
+      throw ErrorService.defaultError();
+    }
+  }
+}
+
+export const isEmailTaken = async(email:string): Promise<boolean> => {
+  try {
+    return !!await userService.isEmailTaken(email);
+  } catch(err) {
     if (err.code) {
       if (err.message) {
         throw new APIError(err.code, err.message);
