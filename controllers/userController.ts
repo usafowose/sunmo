@@ -3,7 +3,6 @@ import { NewUser, NewUserResponse, UserUpdatedResponse } from "../data/models/us
 import { UserKey } from "../routes/handlers";
 import { APIError, ErrorService, UserService } from '../services';
 
-
 const userService = new UserService();
 
 export const getAllUsers = async (): Promise<User[]> => {
@@ -15,7 +14,7 @@ export const getAllUsers = async (): Promise<User[]> => {
       if (err.message) {
         throw new APIError(err.code, err.message);
       }
-      throw new APIError(err.code, ErrorService.defaultErrorMessage)
+      throw new APIError(err.code, ErrorService.defaultErrorMessage);
     } else {
       if (err.message) {
         throw new APIError(500, err.message);
@@ -24,7 +23,7 @@ export const getAllUsers = async (): Promise<User[]> => {
       throw ErrorService.defaultError();
     }
   }
-}
+};
 
 // user clicks a profile in tree to view more info.. this profile is already mapped to id so we can grab profile directly from id
 export const getUserById = async (userId: string): Promise<User[]> => {
@@ -36,7 +35,7 @@ export const getUserById = async (userId: string): Promise<User[]> => {
       if (err.message) {
         throw new APIError(err.code, err.message);
       }
-      throw new APIError(err.code, ErrorService.defaultErrorMessage)
+      throw new APIError(err.code, ErrorService.defaultErrorMessage);
     } else {
       if (err.message) {
         throw new APIError(500, err.message);
@@ -45,7 +44,7 @@ export const getUserById = async (userId: string): Promise<User[]> => {
       throw ErrorService.defaultError();
     }
   }
-}
+};
 
 export const getPendingUsers = async (): Promise<User[]> => {
   try {
@@ -56,7 +55,7 @@ export const getPendingUsers = async (): Promise<User[]> => {
       if (err.message) {
         throw new APIError(err.code, err.message);
       }
-      throw new APIError(err.code, ErrorService.defaultErrorMessage)
+      throw new APIError(err.code, ErrorService.defaultErrorMessage);
     } else {
       if (err.message) {
         throw new APIError(500, err.message);
@@ -65,10 +64,10 @@ export const getPendingUsers = async (): Promise<User[]> => {
       throw ErrorService.defaultError();
     }
   }
-}
+};
 
 export const getUsersByLastName = async (lastName: string): Promise<User[]> => {
-  const lastNameFilter: Map<UserKey, any> = new Map([['last_name', lastName]]);
+  const lastNameFilter: Map<UserKey, string> = new Map([['last_name', lastName]]);
   try {
     const users: User[] = await userService.getUsersWhere(lastNameFilter);
     return users;
@@ -77,7 +76,7 @@ export const getUsersByLastName = async (lastName: string): Promise<User[]> => {
       if (err.message) {
         throw new APIError(err.code, err.message);
       }
-      throw new APIError(err.code, ErrorService.defaultErrorMessage)
+      throw new APIError(err.code, ErrorService.defaultErrorMessage);
     } else {
       if (err.message) {
         throw new APIError(500, err.message);
@@ -130,7 +129,7 @@ export const getUsersByLastName = async (lastName: string): Promise<User[]> => {
 //   }
 // }
 
-export const getUsersWithFilters = async (filters: Map<UserKey, any>): Promise<User[]> => {
+export const getUsersWithFilters = async (filters: Map<UserKey, any>): Promise<User[]> => {// eslint-disable-line @typescript-eslint/no-explicit-any
   try {
     const filteredUsers: User[] = await userService.getUsersWhere(filters);
     return filteredUsers;
@@ -139,7 +138,7 @@ export const getUsersWithFilters = async (filters: Map<UserKey, any>): Promise<U
       if (err.message) {
         throw new APIError(err.code, err.message);
       }
-      throw new APIError(err.code, ErrorService.defaultErrorMessage)
+      throw new APIError(err.code, ErrorService.defaultErrorMessage);
     } else {
       if (err.message) {
         throw new APIError(500, err.message);
@@ -148,7 +147,7 @@ export const getUsersWithFilters = async (filters: Map<UserKey, any>): Promise<U
       throw ErrorService.defaultError();
     }
   }
-}
+};
 
 export const createNewUser = async(user: NewUser): Promise<NewUserResponse> => {
   try {
@@ -159,7 +158,7 @@ export const createNewUser = async(user: NewUser): Promise<NewUserResponse> => {
       if (err.message) {
         throw new APIError(err.code, err.message);
       }
-      throw new APIError(err.code, ErrorService.defaultErrorMessage)
+      throw new APIError(err.code, ErrorService.defaultErrorMessage);
     } else {
       if (err.message) {
         throw new APIError(500, err.message);
@@ -168,7 +167,7 @@ export const createNewUser = async(user: NewUser): Promise<NewUserResponse> => {
       throw ErrorService.defaultError();
     }
   }
-}
+};
 
 export const updateEmail = async(user_id: number, email: string): Promise<UserUpdatedResponse> => {
   try {
@@ -180,7 +179,7 @@ export const updateEmail = async(user_id: number, email: string): Promise<UserUp
       if (err.message) {
         throw new APIError(err.code, err.message);
       }
-      throw new APIError(err.code, ErrorService.defaultErrorMessage)
+      throw new APIError(err.code, ErrorService.defaultErrorMessage);
     } else {
       if (err.message) {
         throw new APIError(500, err.message);
@@ -189,7 +188,7 @@ export const updateEmail = async(user_id: number, email: string): Promise<UserUp
       throw ErrorService.defaultError();
     }
   }
-}
+};
 
 export const findExistenceForUpdate = async(user_id: string): Promise<boolean> => {
   try {
@@ -200,7 +199,7 @@ export const findExistenceForUpdate = async(user_id: string): Promise<boolean> =
       if (err.message) {
         throw new APIError(err.code, err.message);
       }
-      throw new APIError(err.code, ErrorService.defaultErrorMessage)
+      throw new APIError(err.code, ErrorService.defaultErrorMessage);
     } else {
       if (err.message) {
         throw new APIError(500, err.message);
@@ -219,7 +218,7 @@ export const doesUserExist = async(email: string, dob: Date): Promise<boolean> =
       if (err.message) {
         throw new APIError(err.code, err.message);
       }
-      throw new APIError(err.code, ErrorService.defaultErrorMessage)
+      throw new APIError(err.code, ErrorService.defaultErrorMessage);
     } else {
       if (err.message) {
         throw new APIError(500, err.message);
@@ -228,7 +227,7 @@ export const doesUserExist = async(email: string, dob: Date): Promise<boolean> =
       throw ErrorService.defaultError();
     }
   }
-}
+};
 
 export const isEmailTaken = async(email:string): Promise<boolean> => {
   try {
@@ -247,4 +246,4 @@ export const isEmailTaken = async(email:string): Promise<boolean> => {
       throw ErrorService.defaultError();
     }
   }
-}
+};

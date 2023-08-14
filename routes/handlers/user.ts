@@ -1,14 +1,13 @@
 import { NextFunction, Request, RequestHandler, Response } from "express";
-import { sqlDB } from "../../data/management";
-import { User } from '../../data/models';
-import { 
+
+import {
   getAllUsers, getPendingUsers, getUserById, getUsersWithFilters, createNewUser, doesUserExist, updateEmail, findExistenceForUpdate, isEmailTaken,
-  // resetUserPassword, updateEmail
 } from '../../controllers/userController';
-import  { APIError, APIRoute, ErrorService, ProfileHandlerMethod, } from '../../services';
 import { mockUserInput } from "../../data/mock/user";
-import { createFilterMapFromRequest } from "../../utils/filtermap";
+import { User } from '../../data/models';
 import { NewUser, NewUserResponse, UpdateEmailRequestBody, UserUpdatedResponse } from "../../data/models/user";
+import  { APIError, ErrorService, } from '../../services';
+import { createFilterMapFromRequest } from "../../utils/filtermap";
 
 export type UserKey = keyof Partial<Pick<User, 'first_name' | 'email' | 'last_name' | 'user_name'>>;
 
@@ -99,10 +98,11 @@ export const renderFallbackPage: RequestHandler = (
   _next: NextFunction
 ): void => {
   return res.status(404).render('fallback');
-}
+};
 
-export const updateEmailHandler: RequestHandler<{}, any, UpdateEmailRequestBody> = async (
-  req: Request<{}, any, UpdateEmailRequestBody>,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const updateEmailHandler: RequestHandler<object, any, UpdateEmailRequestBody> = async (
+  req: Request<object, any, UpdateEmailRequestBody>,
   res: Response,
   next: NextFunction
 ): Promise<void> => {

@@ -1,4 +1,4 @@
-import { FilterMap, operatorSymbolMap, Operator } from "./operatorsymbolmap";
+import { FilterMap, operatorSymbolMap } from "./operatorsymbolmap";
 
 export enum Method {
   Get = 'GET',
@@ -11,7 +11,7 @@ export enum Method {
 export class StandardQueryBuilder {
   private _query: string | null;
 
-  constructor() { 
+  constructor() {
     this._query = '';
   }
 
@@ -40,13 +40,13 @@ export class StandardQueryBuilder {
     columnNames?: undefined,
   ): string | null;
 
-  /** 
-   * 
-   * @param method 
-   * @param tableName 
-   * @param filters 
-   * @param columnNames 
-   * @returns 
+  /**
+   *
+   * @param method
+   * @param tableName
+   * @param filters
+   * @param columnNames
+   * @returns
    */
   public getQuery(
     method: Method,
@@ -65,6 +65,7 @@ export class StandardQueryBuilder {
         } else {
           this._query = null;
         }
+      break;
       case Method.Put:
       case Method.Patch:
         if (columnNames?.length) {
@@ -77,7 +78,7 @@ export class StandardQueryBuilder {
         if (filters?.size) {
           this._buildDeleteQuery(tableName, filters);
         } else {
-         this._query = null
+         this._query = null;
         }
         break;
       default:
@@ -89,7 +90,7 @@ export class StandardQueryBuilder {
   }
   /**
    * This function as well as the other private functions
-   * @param tableName 
+   * @param tableName
    */
   // TODO(afowose): build out this method
   private _buildGetQuery(tableName: string): void
@@ -110,20 +111,20 @@ export class StandardQueryBuilder {
 
   /**
    * A function that dynamically builds an insert query with placeholders for values
-   * @param {string} tableName - a string representation of the insertion destination's table name 
+   * @param {string} tableName - a string representation of the insertion destination's table name
    * @param {array} columnNames - an array of column names to be inserted into
    * @returns void
    */
   private _buildInsertQuery(tableName: string, columnNames: string[]): void {
     const columns: string = columnNames.reduce((acc, name, i, arr) => i === arr.length - 1 ? `${acc}${name}` : `${acc}${name},`, '');
-    let placeholders: string = columnNames.reduce((acc, name, i, arr) => i === arr.length - 1 ? `${acc}?` : `${acc}?,`, '');
+    const placeholders: string = columnNames.reduce((acc, name, i, arr) => i === arr.length - 1 ? `${acc}?` : `${acc}?,`, '');
 
     this._query = `INSERT INTO ${tableName.toLowerCase()} (${columns}) VALUES (${placeholders})`;
   }
 
   // TODO(afowose): build out this method
   private _buildUpdateQuery(tableName: string, columnNames: string[] , filters?: string | string[]): void {
-    const assignments: string = '';
+    const assignments = '';
     const filterCondition = filters ? `WHERE ${filters}` : '';
     this._query = `UPDATE ${tableName} SET ${assignments} ${filterCondition}`;
   }
@@ -141,17 +142,16 @@ export class StandardQueryBuilder {
   }
 
   private _getConditionFromFilterMap(filters: FilterMap): string {
-      let filterArray: string[] = new Array(filters.size);
+      const filterArray: string[] = new Array(filters.size);
       let i = 0;
       for (const [columnName, operator] of filters.entries()) {
         if (!columnName || !!operator) {
           throw new Error('Missing entry in filter');
         }
-        filterArray[i] = `${columnName} ${operatorSymbolMap[operator]} ?`
-        i++
+        filterArray[i] = `${columnName} ${operatorSymbolMap[operator]} ?`;
+        i++;
       }
 
       return filterArray.join(filterArray.length === 1 ? '' : ' AND ');
   }
-
 }
