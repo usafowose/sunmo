@@ -1,6 +1,7 @@
-import { RequestHandler, Router } from 'express';
+import { Router } from 'express';
+
 import { ProfileRouter } from './routers/profile';
-import { UserRouter } from './routers/user'
+import { UserRouter } from './routers/user';
 
 export interface RouteConfig {
   baseRoute: string,
@@ -16,4 +17,3 @@ export const Routes: RouteConfig[] = [
     entityRouter: UserRouter.router
   }
 ];
-

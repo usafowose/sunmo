@@ -31,9 +31,7 @@ export class APIError extends Error {
 
 export class ErrorService {
   static defaultError = (message?: string): APIError => new APIError(500, this.defaultErrorMessage + (message ? `: ${message}` : ''));
-  static defaultErrorMessage =  'Internal Server Error'
-
-
+  static defaultErrorMessage =  'Internal Server Error';
 
   static getError(route?: APIRoute, method?: HandlerMethod, errorCode?: number): APIError {
     if (!errorCode || errorCode === 500) {
@@ -68,10 +66,6 @@ export class ErrorService {
 
       default: return this.defaultError();
     }
-  }
-
-  private static _setInvitationsRouteError(method: ProfileHandlerMethod, errorCode: number): APIError {
-    throw new Error("Method not implemented.");
   }
 
 }

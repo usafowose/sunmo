@@ -1,6 +1,7 @@
 import { Router } from "express";
 import * as express from 'express';
-import { getUsersHandler, getUnregisteredUsersHandler, getUserByIdHandler, createNewUserHandler, renderFallbackPage, /* updateEmailHandler */ 
+
+import { getUsersHandler, getUnregisteredUsersHandler, getUserByIdHandler, createNewUserHandler, renderFallbackPage, /* updateEmailHandler */
 updateEmailHandler} from "../handlers";
 
 export class UserRouter {

@@ -7,7 +7,7 @@ export enum Operator {
   GREATERTHANEQUALTO = "GREATERTHANEQUALTO",
   LESSTHAN = "LESSTHAN",
   LESSTHANEQUALTO = "LESSTHANEQUALTO",
-};
+}
 
 export const operatorSymbolMap: Record<Operator, string> = {
   [Operator.EQUALTO]: "=",

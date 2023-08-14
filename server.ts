@@ -1,18 +1,18 @@
-import * as express from 'express';
 import * as ejs from 'ejs';
+import * as express from 'express';
 import { Express, NextFunction, Request, Response } from "express";
-import { APIError } from "./services/errorservice";
 import "reflect-metadata";
+
 // TODO(andrewfowose): implement internationalization for fallback page
 import { sqlDB } from './data/management';
-import { Routes } from './routes';
 import { User } from './data/models';
-
+import { Routes } from './routes';
+import { APIError } from "./services/errorservice";
 
 sqlDB.initialize().then(async () => {
 
   const app: Express = express();
-  
+
   app.use(express.json());
 
   Routes.forEach(({baseRoute, entityRouter}) => {
@@ -21,11 +21,11 @@ sqlDB.initialize().then(async () => {
 
   app.set('view engine', 'ejs');
   app.engine('html', ejs.renderFile);
-  app.all('*', (_req: Request, res: Response, next: NextFunction) => {
+  app.all('*', (_req: Request, res: Response, _next: NextFunction) => {
     res.status(404).render('fallback');
   });
   app.use(errorMW);
-  
+
   await sqlDB.manager.save([
     sqlDB.manager.create(User, {
       first_name: 'Andrew',
@@ -54,7 +54,7 @@ const PORT = process.env.PORT || 8080;
   });
 });
 
-const errorMW = (err: APIError, req: Request, res: Response, next: NextFunction): Response<any> => {
+const errorMW = (err: APIError, req: Request, res: Response, _next: NextFunction): Response<any> => { // eslint-disable-line @typescript-eslint/no-explicit-any
   const { message, code } = err;
   if (message) {
     console.error(message); //TODO(afowose) Log the error for debugging purposes via middleware or Logger class

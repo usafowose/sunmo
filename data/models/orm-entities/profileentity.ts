@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, OneToMany, OneToOne, JoinColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm";
+
 import { User } from "./userentity";
 
 @Entity()
@@ -7,7 +8,7 @@ export class Profile {
   profile_id: number;
 
   @Column({ nullable: false })
-  user_id: number
+  user_id: number;
 
   @Column("varchar", { length: 255, nullable: false })
   display_name: string;
@@ -20,6 +21,6 @@ export class Profile {
 
   @OneToOne(() => User, user => user.profile, {onDelete: "CASCADE", nullable: false})
   @JoinColumn({name: "user_id"})
-  user: User
+  user: User;
 
 }

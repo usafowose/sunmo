@@ -1,8 +1,9 @@
 import { Pool } from 'mysql2/promise';
-import { sqlDB, connectionManager1 } from '../management';
-import { FilterMap, operatorSymbolMap, Operator } from '../../utils/operatorsymbolmap';
+import { Repository } from 'typeorm';
+
+import { FilterMap, Operator } from '../../utils/operatorsymbolmap';
 import { Method, StandardQueryBuilder } from '../../utils/querybuilder';
-import { In, Repository } from 'typeorm';
+import { sqlDB, connectionManager1 } from '../management';
 import { Profile } from '../models/orm-entities/profileentity';
 
 export class ProfileAccessLayer {
@@ -10,6 +11,7 @@ export class ProfileAccessLayer {
   private _queryBuilder: StandardQueryBuilder = new StandardQueryBuilder();
   private _profileRepository: Repository<Profile> = sqlDB.getRepository(Profile);
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   constructor() {}
 
 // TODO (afowose): in each of these handler calls (handler calls these) work with sqlDB.repository (repo)
@@ -41,12 +43,11 @@ export class ProfileAccessLayer {
         throw err;
       }
     }
-    
   }
 
   async deleteProfile(profileId: string): Promise<void> {
     try {
-      const result = await this._profileRepository.delete({profile_id: Number(profileId)});
+      await this._profileRepository.delete({profile_id: Number(profileId)});
     } catch (err) {
       console.error(String(err));
     }

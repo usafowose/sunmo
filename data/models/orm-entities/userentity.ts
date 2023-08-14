@@ -29,5 +29,5 @@ export class User {
     is_registered: boolean;
 
     @OneToOne(() => Profile, profile => profile.user, { onDelete: "CASCADE" })
-    profile: Profile
+    profile: Profile;
 }
