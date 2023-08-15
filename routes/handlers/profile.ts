@@ -3,6 +3,7 @@ import { NextFunction, Request, RequestHandler, Response } from "express";
 import { getProfileById, getAllProfiles } from '../../controllers/profileController';
 import { Profile } from '../../data/models';
 import  { APIError, APIRoute, ErrorService, ProfileHandlerMethod, } from '../../services/errorservice';
+import { SunmoResponse } from "../../utils/SunmoResponse";
 
 export const getProfileByIdHandler: RequestHandler<{ id: string }> = async (
   req: Request<{ id: string }>,
@@ -24,12 +25,13 @@ export const getProfileByIdHandler: RequestHandler<{ id: string }> = async (
 
 export const getAllProfilesHandler: RequestHandler = async (
   req: Request,
-  res: Response<Profile[] | null>,
+  res: Response<SunmoResponse<Profile[] | null>>,
   next: NextFunction
-): Promise<Response<Profile[] | null>> => {
+): Promise<Response<SunmoResponse<Profile[] | null>>> => {
   try {
     const allFamilyProfiles: Profile[] = await getAllProfiles();
-    return res.status(200).send(allFamilyProfiles);
+    const response: SunmoResponse<Profile[]> = new SunmoResponse(200, null, allFamilyProfiles);
+    return res.status(200).json(response);
   } catch (err) {
     next(err);
   }

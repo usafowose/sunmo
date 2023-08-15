@@ -2,7 +2,7 @@ import { Pool } from 'mysql2/promise';
 import { Repository } from 'typeorm';
 
 import { FilterMap, Operator } from '../../utils/operatorsymbolmap';
-import { Method, StandardQueryBuilder } from '../../utils/querybuilder';
+import { Method, StandardQueryBuilder } from '../../utils/QueryBuilder';
 import { sqlDB, connectionManager1 } from '../management';
 import { Profile } from '../models/orm-entities/profileentity';
 
