@@ -5,18 +5,20 @@ import { Profile } from '../../data/models';
 import  { APIError, APIRoute, ErrorService, ProfileHandlerMethod, } from '../../services/errorservice';
 import { SunmoResponse } from "../../utils/SunmoResponse";
 
-export const getProfileByIdHandler: RequestHandler<{ id: string }> = async (
+export const getProfileByIdHandler: RequestHandler<{ id: string }, SunmoResponse<Profile> > = async (
   req: Request<{ id: string }>,
-  res: Response<Profile>,
+  res: Response<SunmoResponse<Profile>>,
   next: NextFunction
-): Promise<Response<Profile>> => {
+): Promise<Response<SunmoResponse<Profile>>> => {
   const { id } = req.params;
   if (!id) {
     next(ErrorService.getError(APIRoute.PROFILES, ProfileHandlerMethod.GETPROFILE, 400));
   }
   try {
-    const profileById = await getProfileById(id);
-    return res.status(200).json(profileById);
+    const profileById: Profile = await getProfileById(id);
+
+    const response = new SunmoResponse<Profile>(200, null, profileById);
+    return res.status(200).json(response);
   } catch (err) {
     const error = err as APIError;
     next(error);

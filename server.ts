@@ -8,6 +8,7 @@ import { sqlDB } from './data/management';
 import { User } from './data/models';
 import { Routes } from './routes';
 import { APIError } from "./services/errorservice";
+import { SunmoResponse } from './utils/SunmoResponse';
 
 sqlDB.initialize().then(async () => {
 
@@ -54,11 +55,13 @@ const PORT = process.env.PORT || 8080;
   });
 });
 
-const errorMW = (err: APIError, req: Request, res: Response, _next: NextFunction): Response<any> => { // eslint-disable-line @typescript-eslint/no-explicit-any
+const errorMW = (err: APIError, req: Request, res: Response, _next: NextFunction): Response<SunmoResponse<APIError | any>> => { // eslint-disable-line @typescript-eslint/no-explicit-any
   const { message, code } = err;
   if (message) {
     console.error(message); //TODO(afowose) Log the error for debugging purposes via middleware or Logger class
   }
 
-  return res.status(code).json(err);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const response = new SunmoResponse<APIError | any>(code, message, err);
+  return res.status(code).json(response);
 };

@@ -28,7 +28,7 @@ export class ProfileAccessLayer {
         const [results, _fields] = await connectionPool.execute(query, [ profileId ]);
         console.log(results);
         // TODO(afowose): Fix return val;
-        return null;
+        return results[0];
       } catch (err) {
         console.error(err);
         throw err;
