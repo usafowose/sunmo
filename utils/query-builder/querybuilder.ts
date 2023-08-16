@@ -1,4 +1,4 @@
-import { FilterMap, operatorSymbolMap } from "./operatorsymbolmap";
+import { FilterMap, operatorSymbolMap } from "../operatorsymbolmap";
 
 export enum Method {
   Get = 'GET',

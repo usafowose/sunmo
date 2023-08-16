@@ -2,7 +2,7 @@ import { Pool } from 'mysql2/promise';
 import { Repository } from 'typeorm';
 
 import { FilterMap, Operator } from '../../utils/operatorsymbolmap';
-import { Method, StandardQueryBuilder } from '../../utils/querybuilder';
+import { Method, StandardQueryBuilder } from '../../utils/query-builder';
 import { sqlDB, connectionManager1 } from '../management';
 import { Profile } from '../models/orm-entities/profileentity';
 
@@ -26,9 +26,7 @@ export class ProfileAccessLayer {
     if (query) {
       try {
         const [results, _fields] = await connectionPool.execute(query, [ profileId ]);
-        console.log(results);
-        // TODO(afowose): Fix return val;
-        return null;
+        return results[0];
       } catch (err) {
         console.error(err);
         throw err;
