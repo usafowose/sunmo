@@ -8,7 +8,7 @@ import { User } from '../../data/models';
 import { NewUser, NewUserResponse, UpdateEmailRequestBody, UserUpdatedResponse } from "../../data/models/user";
 import  { APIError, ErrorService, } from '../../services';
 import { createFilterMapFromRequest } from "../../utils/filtermap";
-import { SunmoResponse } from "../../utils/SunmoResponse";
+import { SunmoResponse } from "../../utils/sunmo-response";
 
 export type UserKey = keyof Partial<Pick<User, 'first_name' | 'email' | 'last_name' | 'user_name'>>;
 

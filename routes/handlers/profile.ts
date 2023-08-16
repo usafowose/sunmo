@@ -3,7 +3,7 @@ import { NextFunction, Request, RequestHandler, Response } from "express";
 import { getProfileById, getAllProfiles } from '../../controllers/profileController';
 import { Profile } from '../../data/models';
 import  { APIError, APIRoute, ErrorService, ProfileHandlerMethod, } from '../../services/errorservice';
-import { SunmoResponse } from "../../utils/SunmoResponse";
+import { SunmoResponse } from "../../utils/sunmo-response";
 
 export const getProfileByIdHandler: RequestHandler<{ id: string }, SunmoResponse<Profile> > = async (
   req: Request<{ id: string }>,

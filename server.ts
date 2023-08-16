@@ -8,7 +8,7 @@ import { sqlDB } from './data/management';
 import { User } from './data/models';
 import { Routes } from './routes';
 import { APIError } from "./services/errorservice";
-import { SunmoResponse } from './utils/SunmoResponse';
+import { SunmoResponse } from './utils/sunmo-response';
 
 sqlDB.initialize().then(async () => {
 

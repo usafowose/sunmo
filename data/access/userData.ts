@@ -2,7 +2,7 @@
 import { Pool } from 'mysql2/promise';
 import { Repository } from "typeorm";
 
-import { StandardQueryBuilder } from "../../utils/QueryBuilder";
+import { StandardQueryBuilder } from "../../utils/query-builder";
 import { connectionManager1, sqlDB } from "../management";
 import { User } from "../models";
 import { CreateUserInput } from '../models/profile';
